@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Sensi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#080808,#151515,#080808);
+    color:white;
+    min-height:100vh;
+}
+
+header{
+    text-align:center;
+    padding:25px 15px;
+    background:#111;
+    border-bottom:1px solid #333;
+}
+
+header h1{
+    font-size:28px;
+    color:#ff0055;
+    margin-bottom:8px;
+}
+
+header p{
+    color:#aaa;
+    font-size:14px;
+}
+
+nav{
+    display:flex;
+    overflow-x:auto;
+    background:#0d0d0d;
+    border-bottom:1px solid #292929;
+}
+
+nav button{
+    flex:1;
+    min-width:110px;
+    padding:15px 10px;
+    border:0;
+    background:none;
+    color:#aaa;
+    font-size:14px;
+    cursor:pointer;
+}
+
+nav button.active{
+    color:#fff;
+    background:#1d1d1d;
+    border-bottom:2px solid #ff0055;
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.card{
+    background:linear-gradient(145deg,#151515,#101010);
+    border:1px solid #292929;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:18px;
+}
+
+.card h2{
+    color:#ff0055;
+    font-size:21px;
+    margin-bottom:8px;
+}
+
+.card p{
+    color:#999;
+    font-size:14px;
+    margin-bottom:18px;
+}
+
+.mainBtn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg,#ff0055,#ff0077);
+    color:white;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+}
+
+.dpiButtons{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.dpiButtons button{
+    flex:1;
+    padding:12px;
+    border:1px solid #333;
+    border-radius:9px;
+    background:#111;
+    color:#aaa;
+    cursor:pointer;
+}
+
+.dpiButtons button.selected{
+    background:#ff0055;
+    border-color:#ff0055;
+    color:#fff;
+}
+
+.result,
+.mobiladorResult{
+    margin-top:20px;
+    display:none;
+}
+
+.result.show,
+.mobiladorResult.show{
+    display:block;
+}
+
+.resultTitle{
+    color:#ff0055;
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#0d0d0d;
+    border:1px solid #242424;
+    padding:13px 15px;
+    border-radius:9px;
+    margin-bottom:8px;
+}
+
+.item span:first-child{
+    color:#aaa;
+}
+
+.value{
+    color:#fff;
+    font-weight:bold;
+}
+
+.mobiladorGroup{
+    margin-bottom:22px;
+}
+
+.mobiladorGroup h3{
+    color:#ff0055;
+    margin-bottom:10px;
+    font-size:17px;
+}
+
+.info{
+    background:#101010;
+    border:1px solid #292929;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:18px;
+    color:#888;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.historyEmpty{
+    text-align:center;
+    color:#777;
+    padding:30px 10px;
+}
+
+.historyDate{
+    color:#666;
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+.clearBtn{
+    width:100%;
+    padding:13px;
+    border:1px solid #444;
+    border-radius:9px;
+    background:#171717;
+    color:#aaa;
+    cursor:pointer;
+}
+
+@media(max-width:600px){
+    header h1{
+        font-size:24px;
+    }
+
+    .container{
+        padding:14px;
+    }
+
+    .card{
+        padding:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎯 Gerador de Sensi</h1>
+    <p>Emulador, Mobile e Mobilador</p>
+</header>
+
+<nav>
+    <button class="active" onclick="abrirAba('inicio',this)">
+        🏠 Início
+    </button>
+
+    <button onclick="abrirAba('emulador',this)">
+        🖥️ Emulador
+    </button>
+
+    <button onclick="abrirAba('mobile',this)">
+        📱 Mobile
+    </button>
+
+    <button onclick="abrirAba('mobilador',this)">
+        🎮 Mobilador
+    </button>
+
+    <button onclick="abrirAba('historico',this)">
+        🕘 Histórico
+    </button>
+</nav>
+
+<div class="container">
+
+<!-- INÍCIO -->
+<section id="inicio" class="page active">
+
+    <div class="card">
+        <h2>🖥️ Emulador</h2>
+
+        <p>
+            Gere automaticamente uma configuração para emulador.
+        </p>
+
+        <button class="mainBtn" onclick="gerarEmulador()">
+            GERAR SENSI DE EMULADOR
+        </button>
+    </div>
+
+
+    <div class="card">
+        <h2>📱 Mobile</h2>
+
+        <p>
+            Escolha o modo de DPI e gere sua sensibilidade.
+        </p>
+
+        <div class="dpiButtons">
+            <button
+                id="inicioComDpi"
+                class="selected"
+                onclick="selecionarDpi(true)">
+                COM DPI
+            </button>
+
+            <button
+                id="inicioSemDpi"
+                onclick="selecionarDpi(false)">
+                SEM DPI
+            </button>
+        </div>
+
+        <button class="mainBtn" onclick="gerarMobile()">
+            GERAR SENSI DE MOBILE
+        </button>
+    </div>
+
+
+    <div class="card">
+        <h2>🎮 Mobilador</h2>
+
+        <p>
+            Movimentar fica em cima e Atirar fica embaixo.
+        </p>
+
+        <button class="mainBtn" onclick="gerarMobilador()">
+            GERAR SENSI DE MOBILADOR
+        </button>
+    </div>
+
+</section>
+
+
+<!-- EMULADOR -->
+<section id="emulador" class="page">
+
+    <div class="card">
+
+        <h2>🖥️ Gerador de Emulador</h2>
+
+        <p>
+            Clique para gerar uma configuração.
+        </p>
+
+        <button class="mainBtn" onclick="gerarEmulador()">
+            GERAR SENSI DE EMULADOR
+        </button>
+
+
+        <div id="resultadoEmulador" class="result">
+
+            <div class="resultTitle">
+                ⚡ Configuração gerada
+            </div>
+
+            <div class="item">
+                <span>Sensibilidade X</span>
+                <span class="value" id="emuladorX">-</span>
+            </div>
+
+            <div class="item">
+                <span>Sensibilidade Y</span>
+                <span class="value" id="emuladorY">-</span>
+            </div>
+
+            <div class="item">
+                <span>DPI</span>
+                <span class="value" id="emuladorDpi">-</span>
+            </div>
+
+            <div class="item">
+                <span>Polling Rate</span>
+                <span class="value" id="emuladorPolling">-</span>
+            </div>
+
+            <div class="item">
+                <span>FPS</span>
+                <span class="value" id="emuladorFps">-</span>
+            </div>
+
+            <div class="item">
+                <span>Resolução</span>
+                <span class="value" id="emuladorResolucao">-</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- MOBILE -->
+<section id="mobile" class="page">
+
+    <div class="card">
+
+        <h2>📱 Gerador de Mobile</h2>
+
+        <p>
+            Escolha o modo de DPI.
+        </p>
+
+
+        <div class="dpiButtons">
+
+            <button
+                id="mobileComDpi"
+                class="selected"
+                onclick="selecionarDpi(true)">
+                COM DPI
+            </button>
+
+            <button
+                id="mobileSemDpi"
+                onclick="selecionarDpi(false)">
+                SEM DPI
+            </button>
+
+        </div>
+
+
+        <button class="mainBtn" onclick="gerarMobile()">
+            GERAR SENSI DE MOBILE
+        </button>
+
+
+        <div id="resultadoMobile" class="result">
+
+            <div class="resultTitle">
+                ⚡ Sensibilidade gerada
+            </div>
+
+            <div class="item">
+                <span>Geral</span>
+                <span class="value" id="mobileGeral">-</span>
+            </div>
+
+            <div class="item">
+                <span>Red Dot</span>
+                <span class="value" id="mobileRedDot">-</span>
+            </div>
+
+            <div class="item">
+                <span>Mira 2x</span>
+                <span class="value" id="mobile2x">-</span>
+            </div>
+
+            <div class="item">
+                <span>Mira 4x</span>
+                <span class="value" id="mobile4x">-</span>
+            </div>
+
+            <div class="item">
+                <span>AWM</span>
+                <span class="value" id="mobileAwm">-</span>
+            </div>
+
+            <div class="item">
+                <span>Olhadinha</span>
+                <span class="value" id="mobileOlhadinha">-</span>
+            </div>
+
+            <div class="item" id="mobileDpiItem">
+                <span>DPI</span>
+                <span class="value" id="mobileDpi">-</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- MOBILADOR -->
+<section id="mobilador" class="page">
+
+    <div class="card">
+
+        <h2>🎮 Gerador de Mobilador</h2>
+
+
+        <div class="info">
+
+            <b>🏃 MOVIMENTAR fica em cima.</b>
+            <br>
+
+            <b>🔫 ATIRAR fica embaixo.</b>
+            <br><br>
+
+            Horizontal e Vertical são separados.
+
+        </div>
+
+
+        <button class="mainBtn" onclick="gerarMobilador()">
+            GERAR SENSI DE MOBILADOR
+        </button>
+
+
+        <div id="resultadoMobilador" class="mobiladorResult">
+
+
+            <!-- MOVIMENTAR -->
+            <div class="mobiladorGroup">
+
+                <h3>
+                    🏃 Sensi para Movimentar
+                </h3>
+
+
+                <div class="item">
+                    <span>Horizontal</span>
+
+                    <span
+                        class="value"
+                        id="movimentarHorizontal">
+                        -
+                    </span>
+                </div>
+
+
+                <div class="item">
+                    <span>Vertical</span>
+
+                    <span
+                        class="value"
+                        id="movimentarVertical">
+                        -
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!-- ATIRAR -->
+            <div class="mobiladorGroup">
+
+                <h3>
+                    🔫 Sensi para Atirar
+                </h3>
+
+
+                <div class="item">
+                    <span>Horizontal</span>
+
+                    <span
+                        class="value"
+                        id="atirarHorizontal">
+                        -
+                    </span>
+                </div>
+
+
+                <div class="item">
+                    <span>Vertical</span>
+
+                    <span
+                        class="value"
+                        id="atirarVertical">
+                        -
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- HISTÓRICO -->
+<section id="historico" class="page">
+
+    <div class="card">
+
+        <h2>🕘 Histórico</h2>
+
+        <p>
+            Veja as últimas sensibilidades geradas.
+        </p>
+
+        <div id="listaHistorico"></div>
+
+        <button
+            class="clearBtn"
+            onclick="limparHistorico()">
+            LIMPAR HISTÓRICO
+        </button>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<script>
+
+let usarDpi = true;
+
+
+/* RANDOM */
+function random(min,max){
+
+    return Math.floor(
+        Math.random() * (max - min + 1)
+    ) + min;
+
+}
+
+
+/* TROCAR ABA */
+function abrirAba(nome,botao){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page=>{
+            page.classList.remove("active");
+        });
+
+
+    document
+        .getElementById(nome)
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll("nav button")
+        .forEach(btn=>{
+            btn.classList.remove("active");
+        });
+
+
+    if(botao){
+        botao.classList.add("active");
+    }
+
+
+    if(nome === "historico"){
+        mostrarHistorico();
+    }
+
+}
+
+
+/* DPI */
+function selecionarDpi(valor){
+
+    usarDpi = valor;
+
+
+    document
+        .querySelectorAll(".dpiButtons button")
+        .forEach(btn=>{
+            btn.classList.remove("selected");
+        });
+
+
+    if(valor){
+
+        document
+            .getElementById("inicioComDpi")
+            ?.classList.add("selected");
+
+        document
+            .getElementById("mobileComDpi")
+            ?.classList.add("selected");
+
+    }else{
+
+        document
+            .getElementById("inicioSemDpi")
+            ?.classList.add("selected");
+
+        document
+            .getElementById("mobileSemDpi")
+            ?.classList.add("selected");
+
+    }
+
+}
+
+
+/* EMULADOR */
+function gerarEmulador(){
+
+    const configuracao = {
+
+        "Sensibilidade X":
+            random(70,100),
+
+        "Sensibilidade Y":
+            random(65,95),
+
+        "DPI":
+            random(500,1000),
+
+        "Polling Rate":
+            [500,1000][random(0,1)],
+
+        "FPS":
+            [60,90,120,144,165][random(0,4)],
+
+        "Resolução":
+            [
+                "1280 x 720",
+                "1600 x 900",
+                "1920 x 1080"
+            ][random(0,2)]
+
+    };
+
+
+    document.getElementById("emuladorX").textContent =
+        configuracao["Sensibilidade X"];
+
+    document.getElementById("emuladorY").textContent =
+        configuracao["Sensibilidade Y"];
+
+    document.getElementById("emuladorDpi").textContent =
+        configuracao["DPI"];
+
+    document.getElementById("emuladorPolling").textContent =
+        configuracao["Polling Rate"];
+
+    document.getElementById("emuladorFps").textContent =
+        configuracao["FPS"];
+
+    document.getElementById("emuladorResolucao").textContent =
+        configuracao["Resolução"];
+
+
+    document
+        .getElementById("resultadoEmulador")
+        .classList.add("show");
+
+
+    salvarHistorico(
+        "🖥️ Emulador",
+        configuracao
+    );
+
+
+    abrirAba("emulador");
+
+}
+
+
+/* MOBILE */
+function gerarMobile(){
+
+    const configuracao = {
+
+        "Geral":
+            random(90,200),
+
+        "Red Dot":
+            random(90,200),
+
+        "Mira 2x":
+            random(90,200),
+
+        "Mira 4x":
+            random(90,200),
+
+        "AWM":
+            random(60,160),
+
+        "Olhadinha":
+            random(90,200)
+
+    };
+
+
+    if(usarDpi){
+
+        configuracao["DPI"] =
+            random(400,800);
+
+    }
+
+
+    document.getElementById("mobileGeral").textContent =
+        configuracao["Geral"];
+
+    document.getElementById("mobileRedDot").textContent =
+        configuracao["Red Dot"];
+
+    document.getElementById("mobile2x").textContent =
+        configuracao["Mira 2x"];
+
+    document.getElementById("mobile4x").textContent =
+        configuracao["Mira 4x"];
+
+    document.getElementById("mobileAwm").textContent =
+        configuracao["AWM"];
+
+    document.getElementById("mobileOlhadinha").textContent =
+        configuracao["Olhadinha"];
+
+
+    const dpiItem =
+        document.getElementById("mobileDpiItem");
+
+
+    if(usarDpi){
+
+        dpiItem.style.display = "flex";
+
+        document.getElementById("mobileDpi").textContent =
+            configuracao["DPI"];
+
+    }else{
+
+        dpiItem.style.display = "none";
+
+    }
+
+
+    document
+        .getElementById("resultadoMobile")
+        .classList.add("show");
+
+
+    salvarHistorico(
+        "📱 Mobile",
+        configuracao
+    );
+
+
+    abrirAba("mobile");
+
+}
+
+
+/* MOBILADOR */
+function gerarMobilador(){
+
+    const configuracao = {
+
+        /* MOVIMENTAR É MAIS ALTO */
+        "Movimentar - Horizontal":
+            random(90,200),
+
+        "Movimentar - Vertical":
+            random(90,200),
+
+
+        /* ATIRAR É MAIS BAIXO */
+        "Atirar - Horizontal":
+            random(40,100),
+
+        "Atirar - Vertical":
+            random(40,100)
+
+    };
+
+
+    /* MOVIMENTAR */
+    document
+        .getElementById("movimentarHorizontal")
+        .textContent =
+        configuracao["Movimentar - Horizontal"];
+
+
+    document
+        .getElementById("movimentarVertical")
+        .textContent =
+        configuracao["Movimentar - Vertical"];
+
+
+    /* ATIRAR */
+    document
+        .getElementById("atirarHorizontal")
+        .textContent =
+        configuracao["Atirar - Horizontal"];
+
+
+    document
+        .getElementById("atirarVertical")
+        .textContent =
+        configuracao["Atirar - Vertical"];
+
+
+    document
+        .getElementById("resultadoMobilador")
+        .classList.add("show");
+
+
+    salvarHistorico(
+        "🎮 Mobilador",
+        configuracao
+    );
+
+
+    abrirAba("mobilador");
+
+}
+
+
+/* SALVAR HISTÓRICO */
+function salvarHistorico(tipo,configuracao){
+
+    let historico =
+        JSON.parse(
+            localStorage.getItem("historicoSensi")
+        ) || [];
+
+
+    historico.unshift({
+
+        tipo:tipo,
+
+        configuracao:configuracao,
+
+        data:
+            new Date().toLocaleString("pt-BR")
+
+    });
+
+
+    historico =
+        historico.slice(0,30);
+
+
+    localStorage.setItem(
+        "historicoSensi",
+        JSON.stringify(historico)
+    );
+
+}
+
+
+/* MOSTRAR HISTÓRICO */
+function mostrarHistorico(){
+
+    const lista =
+        document.getElementById(
+            "listaHistorico"
+        );
+
+
+    const historico =
+        JSON.parse(
+            localStorage.getItem("historicoSensi")
+        ) || [];
+
+
+    if(historico.length === 0){
+
+        lista.innerHTML =
+            '<div class="historyEmpty">Nenhuma sensibilidade gerada ainda.</div>';
+
+        return;
+
+    }
+
+
+    lista.innerHTML = "";
+
+
+    historico.forEach(registro=>{
+
+        const card =
+            document.createElement("div");
+
+
+        card.className = "card";
+
+
+        let html = `
+            <h2>${registro.tipo}</h2>
+
+            <div class="historyDate">
+                ${registro.data}
+            </div>
+        `;
+
+
+        Object
+            .entries(registro.configuracao)
+            .forEach(([chave,valor])=>{
+
+                html += `
+                    <div class="item">
+
+                        <span>
+                            ${chave}
+                        </span>
+
+                        <span class="value">
+                            ${valor}
+                        </span>
+
+                    </div>
+                `;
+
+            });
+
+
+        card.innerHTML = html;
+
+
+        lista.appendChild(card);
+
+    });
+
+}
+
+
+/* LIMPAR HISTÓRICO */
+function limparHistorico(){
+
+    localStorage.removeItem(
+        "historicoSensi"
+    );
+
+    mostrarHistorico();
+
+}
+
+
+/* INICIAR COM DPI */
+selecionarDpi(true);
+
+</script>
+
+</body>
+  </html>
