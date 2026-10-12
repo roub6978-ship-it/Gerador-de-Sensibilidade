@@ -6,97 +6,286 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Sensi</title>
+<title>Gerador de Sense</title>
 
 <style>
 
-/* =========================
+/* =====================================================
    RESET
-========================= */
+===================================================== */
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
 
-/* =========================
+/* =====================================================
+   CORES
+===================================================== */
+
+:root{
+
+    --roxo:#7c3aed;
+    --roxo2:#9333ea;
+    --roxo3:#a855f7;
+    --roxoClaro:#ede9fe;
+
+    --branco:#ffffff;
+    --texto:#27213a;
+    --texto2:#6b6478;
+
+    --fundo:#f7f5ff;
+    --fundo2:#ffffff;
+
+    --borda:#e8e2f3;
+
+    --sombra:
+        0 10px 35px rgba(88,48,150,.10);
+
+}
+
+
+/* =====================================================
    BODY
-========================= */
+===================================================== */
 
 body{
 
     min-height:100vh;
 
-    color:white;
+    color:var(--texto);
 
     background:
-        radial-gradient(circle at top left,#35001d 0%,transparent 35%),
-        radial-gradient(circle at bottom right,#160025 0%,transparent 35%),
-        linear-gradient(135deg,#050505,#0b0b0f,#050505);
+
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(168,85,247,.16),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(124,58,237,.12),
+            transparent 28%
+        ),
+
+        linear-gradient(
+            180deg,
+            #faf9ff 0%,
+            #f5f2fc 100%
+        );
 
 }
 
 
-/* =========================
+/* =====================================================
    HEADER
-========================= */
+===================================================== */
 
 header{
 
+    position:relative;
+
+    overflow:hidden;
+
     text-align:center;
 
-    padding:35px 15px 30px;
+    padding:42px 18px 36px;
 
     background:
+
         linear-gradient(
-            180deg,
-            rgba(255,0,85,.10),
-            rgba(0,0,0,0)
+            135deg,
+            #ffffff,
+            #f3edff
         );
 
-    border-bottom:1px solid rgba(255,0,85,.25);
+    border-bottom:1px solid var(--borda);
 
 }
 
+
+/* brilho */
+
+header::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:280px;
+    height:280px;
+
+    left:-120px;
+    top:-180px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(124,58,237,.20),
+            transparent 70%
+        );
+
+}
+
+header::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:260px;
+    height:260px;
+
+    right:-120px;
+    top:-160px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168,85,247,.18),
+            transparent 70%
+        );
+
+}
+
+
+/* =====================================================
+   LOGO
+===================================================== */
+
 .logo{
+
+    position:relative;
+
+    z-index:2;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:12px;
+
+    color:var(--texto);
 
     font-size:34px;
 
     font-weight:900;
 
-    letter-spacing:1px;
-
-    color:#fff;
-
-    text-shadow:
-        0 0 10px rgba(255,0,85,.8),
-        0 0 25px rgba(255,0,85,.4);
+    letter-spacing:-1px;
 
 }
 
-.logo span{
 
-    color:#ff0055;
+/* mira */
+
+.logoMira{
+
+    position:relative;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:48px;
+    height:48px;
+
+    border-radius:50%;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--roxo),
+            var(--roxo3)
+        );
+
+    box-shadow:
+        0 8px 22px
+        rgba(124,58,237,.30);
 
 }
+
+
+/* mira */
+
+.logoMira::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:25px;
+    height:25px;
+
+    border:3px solid white;
+
+    border-radius:50%;
+
+}
+
+.logoMira::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:white;
+
+    box-shadow:
+
+        0 -16px 0 -2px white,
+        0 16px 0 -2px white,
+        16px 0 0 -2px white,
+        -16px 0 0 -2px white;
+
+}
+
+
+/* nome */
+
+.logoText{
+
+    color:var(--roxo);
+
+}
+
 
 header p{
 
-    margin-top:10px;
+    position:relative;
 
-    color:#888;
+    z-index:2;
+
+    margin-top:12px;
+
+    color:var(--texto2);
 
     font-size:14px;
 
 }
 
 
-/* =========================
-   NAVEGAÇÃO
-========================= */
+/* =====================================================
+   NAV
+===================================================== */
 
 nav{
 
@@ -108,115 +297,126 @@ nav{
 
     display:flex;
 
-    gap:6px;
+    gap:8px;
 
-    padding:10px;
+    padding:12px;
 
     overflow-x:auto;
 
-    background:rgba(8,8,10,.92);
+    background:
+        rgba(255,255,255,.90);
 
-    backdrop-filter:blur(15px);
+    backdrop-filter:blur(18px);
 
-    border-bottom:1px solid #24242a;
+    border-bottom:1px solid var(--borda);
+
+    box-shadow:
+        0 4px 18px rgba(55,35,90,.05);
 
 }
 
+
 nav::-webkit-scrollbar{
 
-    height:3px;
+    height:4px;
 
 }
 
 nav::-webkit-scrollbar-thumb{
 
-    background:#ff0055;
+    background:var(--roxo);
 
     border-radius:10px;
 
 }
 
+
 nav button{
 
     min-width:145px;
 
-    padding:13px 14px;
+    padding:13px 15px;
 
-    border:1px solid #28282f;
+    border:1px solid var(--borda);
 
     border-radius:12px;
 
-    background:#111116;
+    background:#fff;
 
-    color:#888;
-
-    cursor:pointer;
+    color:#746d80;
 
     font-size:13px;
 
-    font-weight:bold;
+    font-weight:700;
 
-    transition:.25s;
+    cursor:pointer;
+
+    transition:.2s;
 
 }
+
 
 nav button:hover{
 
-    color:white;
+    color:var(--roxo);
 
-    border-color:#ff0055;
+    border-color:#cfc1ed;
 
-    transform:translateY(-2px);
+    transform:translateY(-1px);
 
 }
+
 
 nav button.active{
 
     color:white;
 
+    border-color:var(--roxo);
+
     background:
         linear-gradient(
             135deg,
-            #ff0055,
-            #8b003c
+            var(--roxo),
+            var(--roxo2)
         );
 
-    border-color:#ff0055;
-
     box-shadow:
-        0 0 15px rgba(255,0,85,.3);
+        0 6px 18px
+        rgba(124,58,237,.25);
 
 }
 
 
-/* =========================
+/* =====================================================
    CONTAINER
-========================= */
+===================================================== */
 
 .container{
 
     width:100%;
 
-    max-width:1000px;
+    max-width:1050px;
 
     margin:auto;
 
-    padding:25px 18px 50px;
+    padding:30px 18px 60px;
 
 }
 
 
-/* =========================
+/* =====================================================
    PÁGINAS
-========================= */
+===================================================== */
 
 .page{
 
     display:none;
 
-    animation:entrada .3s ease;
+    animation:
+        aparecer .3s ease;
 
 }
+
 
 .page.active{
 
@@ -224,7 +424,8 @@ nav button.active{
 
 }
 
-@keyframes entrada{
+
+@keyframes aparecer{
 
     from{
 
@@ -245,9 +446,9 @@ nav button.active{
 }
 
 
-/* =========================
+/* =====================================================
    CARD
-========================= */
+===================================================== */
 
 .card{
 
@@ -255,74 +456,83 @@ nav button.active{
 
     overflow:hidden;
 
-    padding:24px;
+    padding:25px;
 
     margin-bottom:18px;
 
-    border:1px solid #292930;
+    border:1px solid var(--borda);
 
-    border-radius:20px;
+    border-radius:22px;
 
     background:
-        linear-gradient(
-            145deg,
-            rgba(28,28,34,.95),
-            rgba(12,12,16,.95)
-        );
+        rgba(255,255,255,.92);
 
-    box-shadow:
-        0 10px 35px rgba(0,0,0,.35);
+    box-shadow:var(--sombra);
 
 }
 
-.card::before{
+
+.card::after{
 
     content:"";
 
     position:absolute;
 
-    width:150px;
+    width:130px;
+    height:130px;
 
-    height:150px;
-
-    right:-80px;
-
-    top:-80px;
-
-    background:#ff0055;
-
-    opacity:.07;
+    right:-70px;
+    top:-70px;
 
     border-radius:50%;
 
+    background:
+        radial-gradient(
+            circle,
+            rgba(124,58,237,.12),
+            transparent 70%
+        );
+
 }
+
 
 .card h2{
 
-    color:#ff0055;
+    position:relative;
 
-    font-size:21px;
+    z-index:2;
 
     margin-bottom:8px;
 
+    color:#302744;
+
+    font-size:21px;
+
+    font-weight:850;
+
 }
+
 
 .card p{
 
-    color:#85858c;
+    position:relative;
+
+    z-index:2;
+
+    color:var(--texto2);
 
     font-size:14px;
 
-    line-height:1.5;
+    line-height:1.6;
 
     margin-bottom:18px;
 
 }
 
 
-/* =========================
+/* =====================================================
    GRID
-========================= */
+===================================================== */
 
 .grid{
 
@@ -331,26 +541,153 @@ nav button.active{
     grid-template-columns:
         repeat(2,1fr);
 
-    gap:15px;
+    gap:18px;
 
 }
 
 
-/* =========================
-   BOTÃO PRINCIPAL
-========================= */
+/* =====================================================
+   CARD DE MODO
+===================================================== */
+
+.modeCard{
+
+    cursor:pointer;
+
+    transition:
+        transform .25s,
+        box-shadow .25s,
+        border .25s;
+
+}
+
+
+.modeCard:hover{
+
+    transform:translateY(-5px);
+
+    border-color:#cfc0ee;
+
+    box-shadow:
+        0 16px 35px
+        rgba(124,58,237,.14);
+
+}
+
+
+.modeIcon{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:58px;
+    height:58px;
+
+    margin-bottom:15px;
+
+    border-radius:17px;
+
+    color:white;
+
+    font-size:27px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--roxo),
+            var(--roxo3)
+        );
+
+    box-shadow:
+        0 8px 20px
+        rgba(124,58,237,.22);
+
+}
+
+
+.modeCard h3{
+
+    position:relative;
+
+    z-index:2;
+
+    margin-bottom:7px;
+
+    color:#2e2740;
+
+    font-size:18px;
+
+}
+
+
+.modeCard p{
+
+    margin:0;
+
+    color:#777083;
+
+}
+
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:7px 11px;
+
+    margin-bottom:12px;
+
+    border-radius:30px;
+
+    color:var(--roxo);
+
+    background:
+        var(--roxoClaro);
+
+    border:1px solid #ddd3f6;
+
+    font-size:11px;
+
+    font-weight:800;
+
+}
+
+
+/* =====================================================
+   BOTÃO
+===================================================== */
 
 .mainBtn{
+
+    position:relative;
+
+    z-index:3;
 
     width:100%;
 
     padding:16px;
 
-    border:none;
+    border:0;
 
-    border-radius:12px;
+    border-radius:13px;
 
     color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--roxo),
+            var(--roxo2)
+        );
 
     font-size:14px;
 
@@ -358,29 +695,25 @@ nav button.active{
 
     cursor:pointer;
 
-    background:
-        linear-gradient(
-            135deg,
-            #ff0055,
-            #ff006f,
-            #b4004b
-        );
-
     box-shadow:
-        0 8px 20px rgba(255,0,85,.2);
+        0 8px 20px
+        rgba(124,58,237,.22);
 
     transition:.2s;
 
 }
+
 
 .mainBtn:hover{
 
     transform:translateY(-2px);
 
     box-shadow:
-        0 10px 28px rgba(255,0,85,.35);
+        0 12px 28px
+        rgba(124,58,237,.30);
 
 }
+
 
 .mainBtn:active{
 
@@ -389,50 +722,18 @@ nav button.active{
 }
 
 
-/* =========================
-   BOTÃO SECUNDÁRIO
-========================= */
-
-.secondaryBtn{
-
-    width:100%;
-
-    margin-top:10px;
-
-    padding:13px;
-
-    border:1px solid #33333b;
-
-    border-radius:11px;
-
-    background:#15151a;
-
-    color:#aaa;
-
-    cursor:pointer;
-
-}
-
-.secondaryBtn:hover{
-
-    color:white;
-
-    border-color:#ff0055;
-
-}
-
-
-/* =========================
+/* =====================================================
    RESULTADO
-========================= */
+===================================================== */
 
 .result{
 
     display:none;
 
-    margin-top:20px;
+    margin-top:22px;
 
 }
+
 
 .result.show{
 
@@ -440,22 +741,23 @@ nav button.active{
 
 }
 
+
 .resultTitle{
 
     margin-bottom:12px;
 
-    color:#ff0055;
+    color:var(--roxo);
 
     font-size:17px;
 
-    font-weight:bold;
+    font-weight:900;
 
 }
 
 
-/* =========================
+/* =====================================================
    ITEM
-========================= */
+===================================================== */
 
 .item{
 
@@ -467,140 +769,129 @@ nav button.active{
 
     gap:15px;
 
-    padding:15px;
+    padding:15px 16px;
 
-    margin-bottom:8px;
+    margin-bottom:9px;
 
-    border:1px solid #27272d;
+    border:1px solid #ebe6f3;
 
-    border-radius:11px;
+    border-radius:12px;
 
-    background:#0d0d11;
+    background:#faf9fd;
 
 }
+
 
 .item span:first-child{
 
-    color:#8c8c94;
+    color:#716a7d;
 
     font-size:14px;
 
+    font-weight:600;
+
 }
+
 
 .value{
 
-    color:white;
-
-    font-weight:900;
+    color:#382d50;
 
     font-size:15px;
 
-}
-
-
-/* =========================
-   BADGE
-========================= */
-
-.badge{
-
-    display:inline-block;
-
-    padding:6px 10px;
-
-    margin-bottom:12px;
-
-    border-radius:20px;
-
-    background:rgba(255,0,85,.1);
-
-    border:1px solid rgba(255,0,85,.3);
-
-    color:#ff4c87;
-
-    font-size:11px;
-
-    font-weight:bold;
+    font-weight:900;
 
 }
 
 
-/* =========================
-   MOBILADOR
-========================= */
-
-.mobiladorGroup{
-
-    margin-top:20px;
-
-}
-
-.mobiladorGroup h3{
-
-    color:#ff0055;
-
-    font-size:17px;
-
-    margin-bottom:10px;
-
-}
+/* =====================================================
+   INFO
+===================================================== */
 
 .info{
 
-    padding:16px;
+    padding:17px;
 
     margin-bottom:18px;
 
-    border-radius:14px;
+    border:1px solid #e5ddf3;
 
-    border:1px solid #292930;
+    border-radius:15px;
 
-    background:#101015;
+    color:#6d6678;
 
-    color:#85858c;
+    background:#faf8ff;
 
     font-size:13px;
 
-    line-height:1.7;
+    line-height:1.8;
 
 }
+
 
 .info strong{
 
-    color:white;
+    color:var(--roxo);
 
 }
 
 
-/* =========================
+/* =====================================================
+   MOBILADOR
+===================================================== */
+
+.mobiladorGroup{
+
+    margin-top:22px;
+
+}
+
+
+.mobiladorGroup h3{
+
+    margin-bottom:11px;
+
+    color:var(--roxo);
+
+    font-size:17px;
+
+    font-weight:850;
+
+}
+
+
+/* =====================================================
    HISTÓRICO
-========================= */
+===================================================== */
 
 .historyCard{
 
-    margin-bottom:12px;
+    margin-bottom:15px;
 
 }
+
 
 .historyDate{
 
-    color:#666;
+    margin-bottom:12px;
+
+    color:#9a93a5;
 
     font-size:11px;
 
-    margin-bottom:12px;
-
 }
+
 
 .historyEmpty{
 
-    padding:35px 10px;
+    padding:40px 10px;
 
     text-align:center;
 
-    color:#666;
+    color:#9992a5;
 
 }
+
 
 .clearBtn{
 
@@ -608,78 +899,52 @@ nav button.active{
 
     padding:14px;
 
-    border:1px solid #393941;
+    border:1px solid #ddd6e8;
 
-    border-radius:11px;
+    border-radius:12px;
 
-    background:#15151a;
+    background:white;
 
-    color:#aaa;
+    color:#766e82;
+
+    font-weight:700;
 
     cursor:pointer;
 
+    transition:.2s;
+
 }
+
 
 .clearBtn:hover{
 
-    border-color:#ff0055;
+    color:#7c3aed;
 
-    color:white;
+    border-color:#bfaee3;
 
-}
-
-
-/* =========================
-   HOME CARDS
-========================= */
-
-.modeCard{
-
-    cursor:pointer;
-
-    transition:.25s;
-
-}
-
-.modeCard:hover{
-
-    transform:translateY(-4px);
-
-    border-color:#ff0055;
-
-    box-shadow:
-        0 10px 30px rgba(255,0,85,.12);
-
-}
-
-.modeIcon{
-
-    font-size:30px;
-
-    margin-bottom:12px;
-
-}
-
-.modeCard h3{
-
-    font-size:18px;
-
-    margin-bottom:6px;
-
-}
-
-.modeCard p{
-
-    margin-bottom:0;
+    background:#faf8ff;
 
 }
 
 
-/* =========================
-   RESPONSIVO
-========================= */
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:700px){
+
+    .logo{
+
+        font-size:27px;
+
+    }
+
+    .logoMira{
+
+        width:42px;
+        height:42px;
+
+    }
 
     .grid{
 
@@ -687,21 +952,26 @@ nav button.active{
 
     }
 
-    .logo{
+    .container{
 
-        font-size:28px;
+        padding:
+            20px
+            12px
+            45px;
+
+    }
+
+    .card{
+
+        padding:20px;
+
+        border-radius:18px;
 
     }
 
     nav button{
 
-        min-width:130px;
-
-    }
-
-    .container{
-
-        padding:18px 12px 40px;
+        min-width:135px;
 
     }
 
@@ -715,27 +985,34 @@ nav button.active{
 <body>
 
 
-<!-- =========================
+<!-- =====================================================
      HEADER
-========================= -->
+===================================================== -->
 
 <header>
 
     <div class="logo">
-        🎯 <span>GERADOR</span> DE SENSI
+
+        <div class="logoMira"></div>
+
+        <div class="logoText">
+            Gerador de Sense
+        </div>
+
     </div>
 
+
     <p>
-        Configurações de alta precisão para Mobile, Emulador e Mobilador
+        Gere sua sensibilidade de forma rápida e personalizada
     </p>
 
 </header>
 
 
 
-<!-- =========================
+<!-- =====================================================
      NAV
-========================= -->
+===================================================== -->
 
 <nav>
 
@@ -795,23 +1072,25 @@ nav button.active{
     id="inicio"
     class="page active">
 
+
     <div class="card">
 
         <span class="badge">
-            ⚡ NOVA VERSÃO
+            ✨ BEM-VINDO
         </span>
 
         <h2>
-            🎯 Gerador de Sensibilidade
+            🎯 Escolha sua sensibilidade
         </h2>
 
         <p>
-            Escolha uma categoria abaixo para gerar sua configuração.
-            Cada modo possui valores diferentes para deixar sua sensibilidade
-            mais alta ou mais controlada.
+            Selecione uma das opções abaixo para gerar
+            uma configuração personalizada de Mobile,
+            Emulador ou Mobilador.
         </p>
 
     </div>
+
 
 
     <div class="grid">
@@ -830,10 +1109,11 @@ nav button.active{
             </h3>
 
             <p>
-                Sensibilidade rápida e agressiva.
+                Resposta rápida e sensibilidade elevada.
             </p>
 
         </div>
+
 
 
         <div
@@ -849,10 +1129,11 @@ nav button.active{
             </h3>
 
             <p>
-                Sensibilidade mais controlada.
+                Mais controle e movimentos suaves.
             </p>
 
         </div>
+
 
 
         <div
@@ -868,10 +1149,11 @@ nav button.active{
             </h3>
 
             <p>
-                Configuração rápida para emulador.
+                Configuração rápida para emuladores.
             </p>
 
         </div>
+
 
 
         <div
@@ -887,10 +1169,11 @@ nav button.active{
             </h3>
 
             <p>
-                Configuração mais estável.
+                Mais estabilidade e controle.
             </p>
 
         </div>
+
 
 
         <div
@@ -906,10 +1189,11 @@ nav button.active{
             </h3>
 
             <p>
-                Movimentação vertical alta.
+                Horizontal baixa e vertical alta.
             </p>
 
         </div>
+
 
 
         <div
@@ -955,7 +1239,7 @@ nav button.active{
         </h2>
 
         <p>
-            Valores mais altos para uma resposta mais rápida.
+            Valores elevados para uma resposta mais rápida.
         </p>
 
         <button
@@ -972,7 +1256,7 @@ nav button.active{
             class="result">
 
             <div class="resultTitle">
-                ⚡ Configuração gerada
+                ✨ Configuração gerada
             </div>
 
             <div id="mobileAltaValores"></div>
@@ -1004,7 +1288,7 @@ nav button.active{
         </h2>
 
         <p>
-            Valores menores para uma mira mais controlada.
+            Valores mais baixos para maior controle.
         </p>
 
         <button
@@ -1021,7 +1305,7 @@ nav button.active{
             class="result">
 
             <div class="resultTitle">
-                🎯 Configuração gerada
+                ✨ Configuração gerada
             </div>
 
             <div id="mobileBaixaValores"></div>
@@ -1053,7 +1337,7 @@ nav button.active{
         </h2>
 
         <p>
-            Configuração rápida para uma sensibilidade alta.
+            Configuração elevada para movimentos rápidos.
         </p>
 
         <button
@@ -1070,7 +1354,7 @@ nav button.active{
             class="result">
 
             <div class="resultTitle">
-                ⚡ Configuração gerada
+                ✨ Configuração gerada
             </div>
 
             <div id="emuladorAltaValores"></div>
@@ -1102,7 +1386,7 @@ nav button.active{
         </h2>
 
         <p>
-            Configuração mais controlada para emulador.
+            Configuração mais suave e controlada.
         </p>
 
         <button
@@ -1119,7 +1403,7 @@ nav button.active{
             class="result">
 
             <div class="resultTitle">
-                🎯 Configuração gerada
+                ✨ Configuração gerada
             </div>
 
             <div id="emuladorBaixaValores"></div>
@@ -1162,8 +1446,8 @@ nav button.active{
 
             <br><br>
 
-            Essa configuração deixa o movimento horizontal
-            mais controlado e o vertical mais rápido.
+            O movimento horizontal fica mais controlado,
+            enquanto o vertical fica mais rápido.
 
         </div>
 
@@ -1181,7 +1465,7 @@ nav button.active{
             class="result">
 
             <div class="resultTitle">
-                ⚡ Configuração gerada
+                ✨ Configuração gerada
             </div>
 
             <div id="mobiladorAltaValores"></div>
@@ -1220,7 +1504,7 @@ nav button.active{
             <br>
 
             <strong>↕ Vertical:</strong>
-            moderada/alta
+            controlada e superior à horizontal
 
         </div>
 
@@ -1238,7 +1522,7 @@ nav button.active{
             class="result">
 
             <div class="resultTitle">
-                🎯 Configuração gerada
+                ✨ Configuração gerada
             </div>
 
             <div id="mobiladorBaixaValores"></div>
@@ -1294,7 +1578,6 @@ nav button.active{
 
 <script>
 
-
 /* =====================================================
    RANDOM
 ===================================================== */
@@ -1317,10 +1600,8 @@ function abrirAba(nome,botao){
 
     document
         .querySelectorAll(".page")
-        .forEach(page => {
-
+        .forEach(page=>{
             page.classList.remove("active");
-
         });
 
 
@@ -1329,32 +1610,24 @@ function abrirAba(nome,botao){
 
 
     if(pagina){
-
         pagina.classList.add("active");
-
     }
 
 
     document
         .querySelectorAll("nav button")
-        .forEach(btn => {
-
+        .forEach(btn=>{
             btn.classList.remove("active");
-
         });
 
 
     if(botao){
-
         botao.classList.add("active");
-
     }
 
 
-    if(nome === "historico"){
-
+    if(nome==="historico"){
         mostrarHistorico();
-
     }
 
 }
@@ -1371,12 +1644,13 @@ function abrirPorNome(nome){
 
     document
         .querySelectorAll("nav button")
-        .forEach(btn => {
+        .forEach(btn=>{
+
+            const acao =
+                btn.getAttribute("onclick") || "";
 
             if(
-                btn.getAttribute("onclick") &&
-                btn.getAttribute("onclick")
-                .includes("'" + nome + "'")
+                acao.includes("'" + nome + "'")
             ){
 
                 btn.classList.add("active");
@@ -1414,7 +1688,7 @@ function criarItem(nome,valor){
 
 
 /* =====================================================
-   SALVAR
+   HISTÓRICO
 ===================================================== */
 
 function salvarHistorico(tipo,configuracao){
@@ -1461,9 +1735,9 @@ function gerarMobile(nivel){
     let configuracao;
 
 
-    if(nivel === "alta"){
+    if(nivel==="alta"){
 
-        configuracao = {
+        configuracao={
 
             "Geral":
                 random(180,200),
@@ -1490,7 +1764,7 @@ function gerarMobile(nivel){
 
     }else{
 
-        configuracao = {
+        configuracao={
 
             "Geral":
                 random(90,130),
@@ -1518,49 +1792,44 @@ function gerarMobile(nivel){
     }
 
 
-    let html = "";
+    let html="";
 
 
     Object
         .entries(configuracao)
-        .forEach(([nome,valor]) => {
+        .forEach(([nome,valor])=>{
 
-            html += criarItem(
-                nome,
-                valor
-            );
+            html +=
+                criarItem(nome,valor);
 
         });
 
 
-    const valores =
-        document.getElementById(
-            "mobile" +
-            (nivel === "alta"
-                ? "Alta"
-                : "Baixa") +
-            "Valores"
-        );
-
-
-    valores.innerHTML = html;
+    const nomeNivel =
+        nivel==="alta"
+            ? "Alta"
+            : "Baixa";
 
 
     document
         .getElementById(
-            "resultadoMobile" +
-            (nivel === "alta"
-                ? "Alta"
-                : "Baixa")
+            "mobile"+
+            nomeNivel+
+            "Valores"
+        )
+        .innerHTML=html;
+
+
+    document
+        .getElementById(
+            "resultadoMobile"+
+            nomeNivel
         )
         .classList.add("show");
 
 
     salvarHistorico(
-        "📱 Mobile " +
-        (nivel === "alta"
-            ? "Alta"
-            : "Baixa"),
+        "📱 Mobile "+nomeNivel,
         configuracao
     );
 
@@ -1576,9 +1845,9 @@ function gerarEmulador(nivel){
     let configuracao;
 
 
-    if(nivel === "alta"){
+    if(nivel==="alta"){
 
-        configuracao = {
+        configuracao={
 
             "Sensibilidade X":
                 random(90,120),
@@ -1607,7 +1876,7 @@ function gerarEmulador(nivel){
 
     }else{
 
-        configuracao = {
+        configuracao={
 
             "Sensibilidade X":
                 random(60,85),
@@ -1638,46 +1907,44 @@ function gerarEmulador(nivel){
     }
 
 
-    let html = "";
+    let html="";
 
 
     Object
         .entries(configuracao)
-        .forEach(([nome,valor]) => {
+        .forEach(([nome,valor])=>{
 
-            html += criarItem(
-                nome,
-                valor
-            );
+            html +=
+                criarItem(nome,valor);
 
         });
 
 
     const nomeNivel =
-        nivel === "alta"
+        nivel==="alta"
             ? "Alta"
             : "Baixa";
 
 
     document
         .getElementById(
-            "emulador" +
-            nomeNivel +
+            "emulador"+
+            nomeNivel+
             "Valores"
         )
-        .innerHTML = html;
+        .innerHTML=html;
 
 
     document
         .getElementById(
-            "resultadoEmulador" +
+            "resultadoEmulador"+
             nomeNivel
         )
         .classList.add("show");
 
 
     salvarHistorico(
-        "🖥️ Emulador " + nomeNivel,
+        "🖥️ Emulador "+nomeNivel,
         configuracao
     );
 
@@ -1693,14 +1960,9 @@ function gerarMobilador(nivel){
     let configuracao;
 
 
-    /*
-       HORIZONTAL SEMPRE MAIS BAIXA
-       VERTICAL SEMPRE MAIS ALTA
-    */
+    if(nivel==="alta"){
 
-    if(nivel === "alta"){
-
-        configuracao = {
+        configuracao={
 
             "Movimentar — Horizontal":
                 random(40,75),
@@ -1718,7 +1980,7 @@ function gerarMobilador(nivel){
 
     }else{
 
-        configuracao = {
+        configuracao={
 
             "Movimentar — Horizontal":
                 random(25,55),
@@ -1737,10 +1999,7 @@ function gerarMobilador(nivel){
     }
 
 
-    let html = "";
-
-
-    html += `
+    let html=`
 
         <div class="mobiladorGroup">
 
@@ -1791,30 +2050,30 @@ function gerarMobilador(nivel){
 
 
     const nomeNivel =
-        nivel === "alta"
+        nivel==="alta"
             ? "Alta"
             : "Baixa";
 
 
     document
         .getElementById(
-            "mobilador" +
-            nomeNivel +
+            "mobilador"+
+            nomeNivel+
             "Valores"
         )
-        .innerHTML = html;
+        .innerHTML=html;
 
 
     document
         .getElementById(
-            "resultadoMobilador" +
+            "resultadoMobilador"+
             nomeNivel
         )
         .classList.add("show");
 
 
     salvarHistorico(
-        "🎮 Mobilador " + nomeNivel,
+        "🎮 Mobilador "+nomeNivel,
         configuracao
     );
 
@@ -1822,7 +2081,7 @@ function gerarMobilador(nivel){
 
 
 /* =====================================================
-   HISTÓRICO
+   MOSTRAR HISTÓRICO
 ===================================================== */
 
 function mostrarHistorico(){
@@ -1841,13 +2100,15 @@ function mostrarHistorico(){
         ) || [];
 
 
-    if(historico.length === 0){
+    if(historico.length===0){
 
-        lista.innerHTML = `
+        lista.innerHTML=`
 
             <div class="historyEmpty">
 
-                🕘<br><br>
+                🎯
+
+                <br><br>
 
                 Nenhuma sensibilidade
                 foi gerada ainda.
@@ -1861,22 +2122,20 @@ function mostrarHistorico(){
     }
 
 
-    lista.innerHTML = "";
+    lista.innerHTML="";
 
 
-    historico.forEach(registro => {
+    historico.forEach(registro=>{
 
         const card =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
 
-        card.className =
+        card.className=
             "card historyCard";
 
 
-        let html = `
+        let html=`
 
             <span class="badge">
                 ${registro.tipo}
@@ -1893,19 +2152,15 @@ function mostrarHistorico(){
             .entries(
                 registro.configuracao
             )
-            .forEach(
-                ([nome,valor]) => {
+            .forEach(([nome,valor])=>{
 
-                    html += criarItem(
-                        nome,
-                        valor
-                    );
+                html +=
+                    criarItem(nome,valor);
 
-                }
-            );
+            });
 
 
-        card.innerHTML = html;
+        card.innerHTML=html;
 
 
         lista.appendChild(card);
@@ -1925,7 +2180,6 @@ function limparHistorico(){
         "historicoSensi"
     );
 
-
     mostrarHistorico();
 
 }
@@ -1934,4 +2188,4 @@ function limparHistorico(){
 
 </body>
 
-    </html>
+   </html>
