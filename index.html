@@ -1,2191 +1,399 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Gerador de Sense</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banco Roxo — Simulação</title>
 <style>
-
-/* =====================================================
-   RESET
-===================================================== */
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
-}
-
-
-/* =====================================================
-   CORES
-===================================================== */
-
 :root{
-
-    --roxo:#7c3aed;
-    --roxo2:#9333ea;
-    --roxo3:#a855f7;
-    --roxoClaro:#ede9fe;
-
-    --branco:#ffffff;
-    --texto:#27213a;
-    --texto2:#6b6478;
-
-    --fundo:#f7f5ff;
-    --fundo2:#ffffff;
-
-    --borda:#e8e2f3;
-
-    --sombra:
-        0 10px 35px rgba(88,48,150,.10);
-
+  --purple:#8500d5;
+  --ink:#e8e8e8;
+  --muted:#aaa;
+  --bg:#121212;
+  --card:#1e1e1e;
+  --soft:#2a2a2a;
 }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+.top{background:linear-gradient(135deg,#9700dc,#7100c8);padding:18px 20px 30px;color:white}
+.topbar{display:flex;align-items:center;justify-content:space-between;max-width:760px;margin:auto}
+.avatar{width:44px;height:44px;border-radius:50%;background:#ffffff35;display:grid;place-items:center;font-size:20px;overflow:hidden;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-name{color:white;font-size:14px;font-weight:bold;margin-left:10px}
+.demo{display:inline-block;margin-top:12px;padding:5px 9px;border:1px solid #ffffffa0;border-radius:20px;font-size:10px;letter-spacing:1px}
+.bill{max-width:760px;margin:30px auto 0;background:#2a1a3a;color:#d4b8f0;border-radius:20px;padding:18px 20px;display:flex;align-items:center;gap:14px;font-weight:700}
+main{max-width:760px;margin:0 auto;padding:20px 20px 50px}
+.balancebox{padding:10px 0 20px;display:flex;justify-content:space-between;align-items:center}
+.small{font-size:14px;color:var(--muted)}
+.balance{font-size:32px;font-weight:800;margin-top:6px;color:#fff}
+.chev{font-size:28px;color:#777}
+.actions{display:flex;gap:14px;overflow-x:auto;padding:10px 0 20px;scrollbar-width:none}
+.actions::-webkit-scrollbar{display:none}
+.action{flex:0 0 95px;text-align:center;font-size:13px;font-weight:700;line-height:1.3;color:#ddd;cursor:pointer}
+.action.active .circle{background:#8500d5;color:#fff}
+.circle{width:78px;height:78px;border-radius:50%;background:var(--soft);margin:0 auto 10px;display:grid;place-items:center;font-size:22px;color:#ddd;transition:.2s;font-weight:700}
 
+.tab-content{display:none}
+.tab-content.active{display:block}
 
-/* =====================================================
-   BODY
-===================================================== */
+.panel{background:var(--card);border:1px solid #333;border-radius:16px;padding:20px;margin-top:10px}
+label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:14px 0 6px}
+input{width:100%;padding:13px;border:1px solid #444;border-radius:10px;font-size:16px;background:#2a2a2a;color:#fff}
+button{background:#8500d5;color:white;border:0;border-radius:10px;padding:14px 16px;font-weight:700;font-size:15px;margin-top:16px;cursor:pointer;width:100%}
+button.light{background:#3d2a55;color:#d4b8f0}
+.note{background:#3a2a10;border:1px solid #6b4e1a;border-radius:12px;padding:12px;font-size:12px;line-height:1.4;color:#e8c87a;margin-top:20px}
+#msg,#payMsg,#profileMsg{font-size:13px;color:#c77dff;margin-top:12px;min-height:18px}
+.historyitem{display:flex;justify-content:space-between;border-bottom:1px solid #333;padding:12px 0;font-size:13px;gap:10px}
+.historyitem:last-child{border:0}
+.section-title{font-size:20px;margin:0 0 16px;color:#fff}
 
-body{
-
-    min-height:100vh;
-
-    color:var(--texto);
-
-    background:
-
-        radial-gradient(
-            circle at 10% 0%,
-            rgba(168,85,247,.16),
-            transparent 30%
-        ),
-
-        radial-gradient(
-            circle at 90% 20%,
-            rgba(124,58,237,.12),
-            transparent 28%
-        ),
-
-        linear-gradient(
-            180deg,
-            #faf9ff 0%,
-            #f5f2fc 100%
-        );
-
+#welcome{
+ position:fixed;inset:0;background:linear-gradient(135deg,#9700dc,#7100c8);
+ z-index:9999;display:flex;align-items:center;justify-content:center;padding:22px;
 }
-
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-header{
-
-    position:relative;
-
-    overflow:hidden;
-
-    text-align:center;
-
-    padding:42px 18px 36px;
-
-    background:
-
-        linear-gradient(
-            135deg,
-            #ffffff,
-            #f3edff
-        );
-
-    border-bottom:1px solid var(--borda);
-
+.welcome-card{
+ background:#1e1e1e;border-radius:22px;padding:25px;width:100%;max-width:390px;color:#eee;
 }
-
-
-/* brilho */
-
-header::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:280px;
-    height:280px;
-
-    left:-120px;
-    top:-180px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(124,58,237,.20),
-            transparent 70%
-        );
-
-}
-
-header::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:260px;
-    height:260px;
-
-    right:-120px;
-    top:-160px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(168,85,247,.18),
-            transparent 70%
-        );
-
-}
-
-
-/* =====================================================
-   LOGO
-===================================================== */
-
-.logo{
-
-    position:relative;
-
-    z-index:2;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:12px;
-
-    color:var(--texto);
-
-    font-size:34px;
-
-    font-weight:900;
-
-    letter-spacing:-1px;
-
-}
-
-
-/* mira */
-
-.logoMira{
-
-    position:relative;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    width:48px;
-    height:48px;
-
-    border-radius:50%;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--roxo),
-            var(--roxo3)
-        );
-
-    box-shadow:
-        0 8px 22px
-        rgba(124,58,237,.30);
-
-}
-
-
-/* mira */
-
-.logoMira::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:25px;
-    height:25px;
-
-    border:3px solid white;
-
-    border-radius:50%;
-
-}
-
-.logoMira::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:7px;
-    height:7px;
-
-    border-radius:50%;
-
-    background:white;
-
-    box-shadow:
-
-        0 -16px 0 -2px white,
-        0 16px 0 -2px white,
-        16px 0 0 -2px white,
-        -16px 0 0 -2px white;
-
-}
-
-
-/* nome */
-
-.logoText{
-
-    color:var(--roxo);
-
-}
-
-
-header p{
-
-    position:relative;
-
-    z-index:2;
-
-    margin-top:12px;
-
-    color:var(--texto2);
-
-    font-size:14px;
-
-}
-
-
-/* =====================================================
-   NAV
-===================================================== */
-
-nav{
-
-    position:sticky;
-
-    top:0;
-
-    z-index:100;
-
-    display:flex;
-
-    gap:8px;
-
-    padding:12px;
-
-    overflow-x:auto;
-
-    background:
-        rgba(255,255,255,.90);
-
-    backdrop-filter:blur(18px);
-
-    border-bottom:1px solid var(--borda);
-
-    box-shadow:
-        0 4px 18px rgba(55,35,90,.05);
-
-}
-
-
-nav::-webkit-scrollbar{
-
-    height:4px;
-
-}
-
-nav::-webkit-scrollbar-thumb{
-
-    background:var(--roxo);
-
-    border-radius:10px;
-
-}
-
-
-nav button{
-
-    min-width:145px;
-
-    padding:13px 15px;
-
-    border:1px solid var(--borda);
-
-    border-radius:12px;
-
-    background:#fff;
-
-    color:#746d80;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:.2s;
-
-}
-
-
-nav button:hover{
-
-    color:var(--roxo);
-
-    border-color:#cfc1ed;
-
-    transform:translateY(-1px);
-
-}
-
-
-nav button.active{
-
-    color:white;
-
-    border-color:var(--roxo);
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--roxo),
-            var(--roxo2)
-        );
-
-    box-shadow:
-        0 6px 18px
-        rgba(124,58,237,.25);
-
-}
-
-
-/* =====================================================
-   CONTAINER
-===================================================== */
-
-.container{
-
-    width:100%;
-
-    max-width:1050px;
-
-    margin:auto;
-
-    padding:30px 18px 60px;
-
-}
-
-
-/* =====================================================
-   PÁGINAS
-===================================================== */
-
-.page{
-
-    display:none;
-
-    animation:
-        aparecer .3s ease;
-
-}
-
-
-.page.active{
-
-    display:block;
-
-}
-
-
-@keyframes aparecer{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(10px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-
-/* =====================================================
-   CARD
-===================================================== */
-
-.card{
-
-    position:relative;
-
-    overflow:hidden;
-
-    padding:25px;
-
-    margin-bottom:18px;
-
-    border:1px solid var(--borda);
-
-    border-radius:22px;
-
-    background:
-        rgba(255,255,255,.92);
-
-    box-shadow:var(--sombra);
-
-}
-
-
-.card::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:130px;
-    height:130px;
-
-    right:-70px;
-    top:-70px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(124,58,237,.12),
-            transparent 70%
-        );
-
-}
-
-
-.card h2{
-
-    position:relative;
-
-    z-index:2;
-
-    margin-bottom:8px;
-
-    color:#302744;
-
-    font-size:21px;
-
-    font-weight:850;
-
-}
-
-
-.card p{
-
-    position:relative;
-
-    z-index:2;
-
-    color:var(--texto2);
-
-    font-size:14px;
-
-    line-height:1.6;
-
-    margin-bottom:18px;
-
-}
-
-
-/* =====================================================
-   GRID
-===================================================== */
-
-.grid{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(2,1fr);
-
-    gap:18px;
-
-}
-
-
-/* =====================================================
-   CARD DE MODO
-===================================================== */
-
-.modeCard{
-
-    cursor:pointer;
-
-    transition:
-        transform .25s,
-        box-shadow .25s,
-        border .25s;
-
-}
-
-
-.modeCard:hover{
-
-    transform:translateY(-5px);
-
-    border-color:#cfc0ee;
-
-    box-shadow:
-        0 16px 35px
-        rgba(124,58,237,.14);
-
-}
-
-
-.modeIcon{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    width:58px;
-    height:58px;
-
-    margin-bottom:15px;
-
-    border-radius:17px;
-
-    color:white;
-
-    font-size:27px;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--roxo),
-            var(--roxo3)
-        );
-
-    box-shadow:
-        0 8px 20px
-        rgba(124,58,237,.22);
-
-}
-
-
-.modeCard h3{
-
-    position:relative;
-
-    z-index:2;
-
-    margin-bottom:7px;
-
-    color:#2e2740;
-
-    font-size:18px;
-
-}
-
-
-.modeCard p{
-
-    margin:0;
-
-    color:#777083;
-
-}
-
-
-/* =====================================================
-   BADGE
-===================================================== */
-
-.badge{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    padding:7px 11px;
-
-    margin-bottom:12px;
-
-    border-radius:30px;
-
-    color:var(--roxo);
-
-    background:
-        var(--roxoClaro);
-
-    border:1px solid #ddd3f6;
-
-    font-size:11px;
-
-    font-weight:800;
-
-}
-
-
-/* =====================================================
-   BOTÃO
-===================================================== */
-
-.mainBtn{
-
-    position:relative;
-
-    z-index:3;
-
-    width:100%;
-
-    padding:16px;
-
-    border:0;
-
-    border-radius:13px;
-
-    color:white;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--roxo),
-            var(--roxo2)
-        );
-
-    font-size:14px;
-
-    font-weight:900;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 8px 20px
-        rgba(124,58,237,.22);
-
-    transition:.2s;
-
-}
-
-
-.mainBtn:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 12px 28px
-        rgba(124,58,237,.30);
-
-}
-
-
-.mainBtn:active{
-
-    transform:scale(.98);
-
-}
-
-
-/* =====================================================
-   RESULTADO
-===================================================== */
-
-.result{
-
-    display:none;
-
-    margin-top:22px;
-
-}
-
-
-.result.show{
-
-    display:block;
-
-}
-
-
-.resultTitle{
-
-    margin-bottom:12px;
-
-    color:var(--roxo);
-
-    font-size:17px;
-
-    font-weight:900;
-
-}
-
-
-/* =====================================================
-   ITEM
-===================================================== */
-
-.item{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:15px;
-
-    padding:15px 16px;
-
-    margin-bottom:9px;
-
-    border:1px solid #ebe6f3;
-
-    border-radius:12px;
-
-    background:#faf9fd;
-
-}
-
-
-.item span:first-child{
-
-    color:#716a7d;
-
-    font-size:14px;
-
-    font-weight:600;
-
-}
-
-
-.value{
-
-    color:#382d50;
-
-    font-size:15px;
-
-    font-weight:900;
-
-}
-
-
-/* =====================================================
-   INFO
-===================================================== */
-
-.info{
-
-    padding:17px;
-
-    margin-bottom:18px;
-
-    border:1px solid #e5ddf3;
-
-    border-radius:15px;
-
-    color:#6d6678;
-
-    background:#faf8ff;
-
-    font-size:13px;
-
-    line-height:1.8;
-
-}
-
-
-.info strong{
-
-    color:var(--roxo);
-
-}
-
-
-/* =====================================================
-   MOBILADOR
-===================================================== */
-
-.mobiladorGroup{
-
-    margin-top:22px;
-
-}
-
-
-.mobiladorGroup h3{
-
-    margin-bottom:11px;
-
-    color:var(--roxo);
-
-    font-size:17px;
-
-    font-weight:850;
-
-}
-
-
-/* =====================================================
-   HISTÓRICO
-===================================================== */
-
-.historyCard{
-
-    margin-bottom:15px;
-
-}
-
-
-.historyDate{
-
-    margin-bottom:12px;
-
-    color:#9a93a5;
-
-    font-size:11px;
-
-}
-
-
-.historyEmpty{
-
-    padding:40px 10px;
-
-    text-align:center;
-
-    color:#9992a5;
-
-}
-
-
-.clearBtn{
-
-    width:100%;
-
-    padding:14px;
-
-    border:1px solid #ddd6e8;
-
-    border-radius:12px;
-
-    background:white;
-
-    color:#766e82;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:.2s;
-
-}
-
-
-.clearBtn:hover{
-
-    color:#7c3aed;
-
-    border-color:#bfaee3;
-
-    background:#faf8ff;
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:700px){
-
-    .logo{
-
-        font-size:27px;
-
-    }
-
-    .logoMira{
-
-        width:42px;
-        height:42px;
-
-    }
-
-    .grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .container{
-
-        padding:
-            20px
-            12px
-            45px;
-
-    }
-
-    .card{
-
-        padding:20px;
-
-        border-radius:18px;
-
-    }
-
-    nav button{
-
-        min-width:135px;
-
-    }
-
-}
-
+.welcome-card h2{color:#c77dff;margin-top:0}
+#photoStep{display:none}
+.welcome-card button{width:100%}
+.welcome-card input{background:#2a2a2a;color:#fff;border-color:#444}
 </style>
-
 </head>
-
-
 <body>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
-<header>
-
-    <div class="logo">
-
-        <div class="logoMira"></div>
-
-        <div class="logoText">
-            Gerador de Sense
-        </div>
-
-    </div>
-
-
-    <p>
-        Gere sua sensibilidade de forma rápida e personalizada
-    </p>
-
-</header>
-
-
-
-<!-- =====================================================
-     NAV
-===================================================== -->
-
-<nav>
-
-    <button
-        class="active"
-        onclick="abrirAba('inicio',this)">
-        🏠 Início
-    </button>
-
-    <button
-        onclick="abrirAba('mobileAlta',this)">
-        📱 Mobile Alta
-    </button>
-
-    <button
-        onclick="abrirAba('mobileBaixa',this)">
-        📱 Mobile Baixa
-    </button>
-
-    <button
-        onclick="abrirAba('emuladorAlta',this)">
-        🖥️ Emulador Alta
-    </button>
-
-    <button
-        onclick="abrirAba('emuladorBaixa',this)">
-        🖥️ Emulador Baixa
-    </button>
-
-    <button
-        onclick="abrirAba('mobiladorAlta',this)">
-        🎮 Mobilador Alta
-    </button>
-
-    <button
-        onclick="abrirAba('mobiladorBaixa',this)">
-        🎮 Mobilador Baixa
-    </button>
-
-    <button
-        onclick="abrirAba('historico',this)">
-        🕘 Histórico
-    </button>
-
-</nav>
-
-
-
-<div class="container">
-
-
-<!-- =====================================================
-     INÍCIO
-===================================================== -->
-
-<section
-    id="inicio"
-    class="page active">
-
-
-    <div class="card">
-
-        <span class="badge">
-            ✨ BEM-VINDO
-        </span>
-
-        <h2>
-            🎯 Escolha sua sensibilidade
-        </h2>
-
-        <p>
-            Selecione uma das opções abaixo para gerar
-            uma configuração personalizada de Mobile,
-            Emulador ou Mobilador.
-        </p>
-
-    </div>
-
-
-
-    <div class="grid">
-
-
-        <div
-            class="card modeCard"
-            onclick="abrirPorNome('mobileAlta')">
-
-            <div class="modeIcon">
-                📱
-            </div>
-
-            <h3>
-                Mobile Alta
-            </h3>
-
-            <p>
-                Resposta rápida e sensibilidade elevada.
-            </p>
-
-        </div>
-
-
-
-        <div
-            class="card modeCard"
-            onclick="abrirPorNome('mobileBaixa')">
-
-            <div class="modeIcon">
-                📱
-            </div>
-
-            <h3>
-                Mobile Baixa
-            </h3>
-
-            <p>
-                Mais controle e movimentos suaves.
-            </p>
-
-        </div>
-
-
-
-        <div
-            class="card modeCard"
-            onclick="abrirPorNome('emuladorAlta')">
-
-            <div class="modeIcon">
-                🖥️
-            </div>
-
-            <h3>
-                Emulador Alta
-            </h3>
-
-            <p>
-                Configuração rápida para emuladores.
-            </p>
-
-        </div>
-
-
-
-        <div
-            class="card modeCard"
-            onclick="abrirPorNome('emuladorBaixa')">
-
-            <div class="modeIcon">
-                🖥️
-            </div>
-
-            <h3>
-                Emulador Baixa
-            </h3>
-
-            <p>
-                Mais estabilidade e controle.
-            </p>
-
-        </div>
-
-
-
-        <div
-            class="card modeCard"
-            onclick="abrirPorNome('mobiladorAlta')">
-
-            <div class="modeIcon">
-                🎮
-            </div>
-
-            <h3>
-                Mobilador Alta
-            </h3>
-
-            <p>
-                Horizontal baixa e vertical alta.
-            </p>
-
-        </div>
-
-
-
-        <div
-            class="card modeCard"
-            onclick="abrirPorNome('mobiladorBaixa')">
-
-            <div class="modeIcon">
-                🎮
-            </div>
-
-            <h3>
-                Mobilador Baixa
-            </h3>
-
-            <p>
-                Configuração mais controlada.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     MOBILE ALTA
-===================================================== -->
-
-<section
-    id="mobileAlta"
-    class="page">
-
-    <div class="card">
-
-        <span class="badge">
-            📱 MOBILE • ALTA
-        </span>
-
-        <h2>
-            Sensibilidade Alta de Mobile
-        </h2>
-
-        <p>
-            Valores elevados para uma resposta mais rápida.
-        </p>
-
-        <button
-            class="mainBtn"
-            onclick="gerarMobile('alta')">
-
-            ⚡ GERAR SENSI ALTA
-
-        </button>
-
-
-        <div
-            id="resultadoMobileAlta"
-            class="result">
-
-            <div class="resultTitle">
-                ✨ Configuração gerada
-            </div>
-
-            <div id="mobileAltaValores"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     MOBILE BAIXA
-===================================================== -->
-
-<section
-    id="mobileBaixa"
-    class="page">
-
-    <div class="card">
-
-        <span class="badge">
-            📱 MOBILE • BAIXA
-        </span>
-
-        <h2>
-            Sensibilidade Baixa de Mobile
-        </h2>
-
-        <p>
-            Valores mais baixos para maior controle.
-        </p>
-
-        <button
-            class="mainBtn"
-            onclick="gerarMobile('baixa')">
-
-            🎯 GERAR SENSI BAIXA
-
-        </button>
-
-
-        <div
-            id="resultadoMobileBaixa"
-            class="result">
-
-            <div class="resultTitle">
-                ✨ Configuração gerada
-            </div>
-
-            <div id="mobileBaixaValores"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     EMULADOR ALTA
-===================================================== -->
-
-<section
-    id="emuladorAlta"
-    class="page">
-
-    <div class="card">
-
-        <span class="badge">
-            🖥️ EMULADOR • ALTA
-        </span>
-
-        <h2>
-            Sensibilidade Alta de Emulador
-        </h2>
-
-        <p>
-            Configuração elevada para movimentos rápidos.
-        </p>
-
-        <button
-            class="mainBtn"
-            onclick="gerarEmulador('alta')">
-
-            ⚡ GERAR EMULADOR ALTA
-
-        </button>
-
-
-        <div
-            id="resultadoEmuladorAlta"
-            class="result">
-
-            <div class="resultTitle">
-                ✨ Configuração gerada
-            </div>
-
-            <div id="emuladorAltaValores"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     EMULADOR BAIXA
-===================================================== -->
-
-<section
-    id="emuladorBaixa"
-    class="page">
-
-    <div class="card">
-
-        <span class="badge">
-            🖥️ EMULADOR • BAIXA
-        </span>
-
-        <h2>
-            Sensibilidade Baixa de Emulador
-        </h2>
-
-        <p>
-            Configuração mais suave e controlada.
-        </p>
-
-        <button
-            class="mainBtn"
-            onclick="gerarEmulador('baixa')">
-
-            🎯 GERAR EMULADOR BAIXA
-
-        </button>
-
-
-        <div
-            id="resultadoEmuladorBaixa"
-            class="result">
-
-            <div class="resultTitle">
-                ✨ Configuração gerada
-            </div>
-
-            <div id="emuladorBaixaValores"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     MOBILADOR ALTA
-===================================================== -->
-
-<section
-    id="mobiladorAlta"
-    class="page">
-
-    <div class="card">
-
-        <span class="badge">
-            🎮 MOBILADOR • ALTA
-        </span>
-
-        <h2>
-            Sensibilidade Alta de Mobilador
-        </h2>
-
-        <div class="info">
-
-            <strong>↔ Horizontal:</strong>
-            mais baixa
-
-            <br>
-
-            <strong>↕ Vertical:</strong>
-            mais alta
-
-            <br><br>
-
-            O movimento horizontal fica mais controlado,
-            enquanto o vertical fica mais rápido.
-
-        </div>
-
-        <button
-            class="mainBtn"
-            onclick="gerarMobilador('alta')">
-
-            ⚡ GERAR MOBILADOR ALTA
-
-        </button>
-
-
-        <div
-            id="resultadoMobiladorAlta"
-            class="result">
-
-            <div class="resultTitle">
-                ✨ Configuração gerada
-            </div>
-
-            <div id="mobiladorAltaValores"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     MOBILADOR BAIXA
-===================================================== -->
-
-<section
-    id="mobiladorBaixa"
-    class="page">
-
-    <div class="card">
-
-        <span class="badge">
-            🎮 MOBILADOR • BAIXA
-        </span>
-
-        <h2>
-            Sensibilidade Baixa de Mobilador
-        </h2>
-
-        <div class="info">
-
-            <strong>↔ Horizontal:</strong>
-            baixa
-
-            <br>
-
-            <strong>↕ Vertical:</strong>
-            controlada e superior à horizontal
-
-        </div>
-
-        <button
-            class="mainBtn"
-            onclick="gerarMobilador('baixa')">
-
-            🎯 GERAR MOBILADOR BAIXA
-
-        </button>
-
-
-        <div
-            id="resultadoMobiladorBaixa"
-            class="result">
-
-            <div class="resultTitle">
-                ✨ Configuração gerada
-            </div>
-
-            <div id="mobiladorBaixaValores"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     HISTÓRICO
-===================================================== -->
-
-<section
-    id="historico"
-    class="page">
-
-    <div class="card">
-
-        <span class="badge">
-            🕘 HISTÓRICO
-        </span>
-
-        <h2>
-            Histórico de Sensibilidades
-        </h2>
-
-        <p>
-            Suas últimas configurações ficam salvas neste aparelho.
-        </p>
-
-        <div id="listaHistorico"></div>
-
-        <button
-            class="clearBtn"
-            onclick="limparHistorico()">
-
-            🗑️ LIMPAR HISTÓRICO
-
-        </button>
-
-    </div>
-
-</section>
-
-
+<div id="welcome">
+ <div class="welcome-card">
+  <div id="nameStep">
+   <h2>Bem-vindo ao Banco Roxo!</h2>
+   <p>Configure seu perfil de demonstração.</p>
+   <label>Adicione seu nome de usuário</label>
+   <input id="userName" type="text" maxlength="30" placeholder="Seu nome">
+   <label>Saldo inicial (somente números)</label>
+   <input id="initialBalance" type="number" min="0" step="0.01" placeholder="500">
+   <button onclick="confirmProfile()">Confirmar</button>
+  </div>
+  <div id="photoStep">
+   <h2>Escolha sua foto</h2>
+   <p>Selecione uma imagem da galeria.</p>
+   <input id="profilePhoto" type="file" accept="image/*">
+   <button onclick="finishProfile()">Continuar</button>
+   <button class="light" onclick="finishProfile()">Pular por enquanto</button>
+  </div>
+ </div>
 </div>
 
+<header class="top">
+ <div class="topbar">
+  <div style="display:flex;align-items:center">
+   <div class="avatar" id="avatar">R</div>
+   <span class="profile-name" id="displayName"></span>
+  </div>
+  <div style="font-size:22px">•</div>
+ </div>
+ <div style="max-width:760px;margin:auto">
+  <div class="demo">APP FICTÍCIO • MODO DEMONSTRAÇÃO</div>
+ </div>
+ <div class="bill">
+  <span style="font-size:20px">■</span>
+  <span>Seu lembrete de brincadeira</span>
+  <span style="margin-left:auto">⋮</span>
+ </div>
+</header>
 
+<main>
+ <section class="balancebox">
+  <div>
+   <div class="small">Saldo em conta (fictício)</div>
+   <div class="balance" id="balance">R$ 500,00</div>
+  </div>
+  <div class="chev">›</div>
+ </section>
+
+ <nav class="actions">
+  <div class="action active" onclick="abrirAba('inicio', this)">
+    <div class="circle">In</div>Início
+  </div>
+  <div class="action" onclick="abrirAba('pix', this)">
+    <div class="circle">Pix</div>Área Pix
+  </div>
+  <div class="action" onclick="abrirAba('pagar', this)">
+    <div class="circle">Pg</div>Pagar
+  </div>
+  <div class="action" onclick="abrirAba('receber', this)">
+    <div class="circle">Rc</div>Receber
+  </div>
+  <div class="action" onclick="abrirAba('config', this)">
+    <div class="circle">Cf</div>Config
+  </div>
+ </nav>
+
+ <!-- ABA INÍCIO -->
+ <div id="tab-inicio" class="tab-content active">
+  <div class="panel">
+    <div class="section-title">Bem-vindo</div>
+    <p style="color:#aaa;margin:0 0 16px;font-size:14px">Use os botões acima para navegar entre as funções.</p>
+    
+    <div style="background:#2a1a3a;border-radius:14px;padding:16px;color:#d4b8f0;font-size:14px;line-height:1.5">
+      <b>Transferência de brincadeira</b><br>
+      Simule envios e pagamentos usando dados fictícios.
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:16px">
+    <div class="section-title">Últimas movimentações</div>
+    <div id="history">
+      <div class="small">Nenhuma movimentação ainda.</div>
+    </div>
+  </div>
+ </div>
+
+ <!-- ABA PIX -->
+ <div id="tab-pix" class="tab-content">
+  <div class="panel">
+    <div class="section-title">Área Pix e Transferir</div>
+    
+    <label>Identificador fictício de quem recebe</label>
+    <input id="recipient" placeholder="Ex.: DEMO-0002">
+
+    <label>Valor da transferência (R$)</label>
+    <input id="amount" type="number" min="0.01" step="0.01" placeholder="Ex.: 25,00">
+
+    <button onclick="transfer()">Simular transferência</button>
+    <div id="msg"></div>
+    <div class="small" style="margin-top:10px">Use códigos DEMO. Nenhum dinheiro real é enviado.</div>
+  </div>
+ </div>
+
+ <!-- ABA PAGAR -->
+ <div id="tab-pagar" class="tab-content">
+  <div class="panel">
+    <div class="section-title">Pagar</div>
+    <div style="color:#c77dff;font-size:14px;margin-bottom:8px">Adiciona o CPF para pagamento</div>
+    
+    <label>CPF (de brincadeira)</label>
+    <input id="payCpf" type="text" placeholder="Ex.: 123.456.789-00" maxlength="14">
+
+    <label>Valor do pagamento (R$)</label>
+    <input id="payAmount" type="number" min="0.01" step="0.01" placeholder="Ex.: 50,00">
+
+    <button onclick="pagar()">Pagar</button>
+    <div id="payMsg"></div>
+    <div class="small" style="margin-top:10px">CPF apenas fictício. Nenhum pagamento real é feito.</div>
+  </div>
+ </div>
+
+ <!-- ABA RECEBER -->
+ <div id="tab-receber" class="tab-content">
+  <div class="panel">
+    <div class="section-title">Receber de brincadeira</div>
+    <p style="color:#aaa;font-size:14px;margin:0 0 16px">
+      Esta é só uma demonstração. Em um app real, aqui apareceria um QR Code ou chave Pix para receber.
+    </p>
+    <div style="background:#2a2a2a;border-radius:12px;padding:20px;text-align:center;color:#c77dff;font-size:18px;font-weight:700">
+      DEMO-0001
+    </div>
+    <div class="small" style="text-align:center;margin-top:12px">Seu identificador fictício</div>
+  </div>
+ </div>
+
+ <!-- ABA CONFIG -->
+ <div id="tab-config" class="tab-content">
+  <div class="panel">
+    <div class="section-title">Configurações</div>
+
+    <label>Alterar nome de usuário</label>
+    <input id="editName" type="text" maxlength="30" placeholder="Novo nome">
+    <button onclick="changeName()">Salvar nome</button>
+
+    <label>Alterar foto de perfil</label>
+    <input id="changePhoto" type="file" accept="image/*">
+    <button onclick="changeProfilePhoto()">Atualizar foto</button>
+    <div id="profileMsg"></div>
+  </div>
+
+  <div class="panel" style="margin-top:16px">
+    <div class="section-title">Ajustar saldo</div>
+    <label>Quanto você quer mostrar? (R$)</label>
+    <input id="newBalance" type="number" min="0" step="0.01" placeholder="Ex.: 850,00">
+    <button onclick="setBalance()">Atualizar saldo fictício</button>
+  </div>
+
+  <button class="light" style="margin-top:20px" onclick="resetDemo()">Reiniciar demonstração</button>
+ </div>
+
+ <div class="note">
+  <b>Aviso:</b> este é um aplicativo fictício. Não é ligado a banco real.
+  Todos os saldos e movimentos são apenas de brincadeira.
+ </div>
+</main>
 
 <script>
+let balance = 500;
+const transactions = [];
+let username = '';
 
-/* =====================================================
-   RANDOM
-===================================================== */
+const money = n => n.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
 
-function random(min,max){
+function abrirAba(nome, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + nome).classList.add('active');
 
-    return Math.floor(
-        Math.random() *
-        (max-min+1)
-    ) + min;
-
+  document.querySelectorAll('.action').forEach(a => a.classList.remove('active'));
+  if (el) el.classList.add('active');
 }
 
-
-/* =====================================================
-   ABRIR ABA
-===================================================== */
-
-function abrirAba(nome,botao){
-
-    document
-        .querySelectorAll(".page")
-        .forEach(page=>{
-            page.classList.remove("active");
-        });
-
-
-    const pagina =
-        document.getElementById(nome);
-
-
-    if(pagina){
-        pagina.classList.add("active");
-    }
-
-
-    document
-        .querySelectorAll("nav button")
-        .forEach(btn=>{
-            btn.classList.remove("active");
-        });
-
-
-    if(botao){
-        botao.classList.add("active");
-    }
-
-
-    if(nome==="historico"){
-        mostrarHistorico();
-    }
-
+function render() {
+  document.getElementById('balance').textContent = money(balance);
+  const h = document.getElementById('history');
+  h.innerHTML = transactions.length
+    ? transactions.map(t => `
+      <div class="historyitem">
+        <span>\( {t.desc}<br><small> \){t.date}</small></span>
+        <b style="color:${t.value < 0 ? '#ff6b6b' : '#4ade80'}">
+          \( {t.value < 0 ? '−' : '+'} \){money(Math.abs(t.value))}
+        </b>
+      </div>`).join('')
+    : '<div class="small">Nenhuma movimentação ainda.</div>';
 }
 
+function msg(s) { document.getElementById('msg').textContent = s; }
+function payMsg(s) { document.getElementById('payMsg').textContent = s; }
 
-/* =====================================================
-   ABRIR PELO CARD
-===================================================== */
+function confirmProfile() {
+  const name = document.getElementById('userName').value.trim();
+  const value = document.getElementById('initialBalance').value;
 
-function abrirPorNome(nome){
+  if (!name) { alert('Digite seu nome de usuário.'); return; }
+  if (value === '' || !Number.isFinite(Number(value)) || Number(value) < 0) {
+    alert('Digite um saldo inicial válido.'); return;
+  }
 
-    abrirAba(nome,null);
-
-
-    document
-        .querySelectorAll("nav button")
-        .forEach(btn=>{
-
-            const acao =
-                btn.getAttribute("onclick") || "";
-
-            if(
-                acao.includes("'" + nome + "'")
-            ){
-
-                btn.classList.add("active");
-
-            }
-
-        });
-
+  username = name;
+  balance = Number(value);
+  document.getElementById('nameStep').style.display = 'none';
+  document.getElementById('photoStep').style.display = 'block';
 }
 
+function finishProfile() {
+  const file = document.getElementById('profilePhoto').files[0];
+  if (file) showPhoto(file);
 
-/* =====================================================
-   CRIAR ITEM
-===================================================== */
-
-function criarItem(nome,valor){
-
-    return `
-
-        <div class="item">
-
-            <span>
-                ${nome}
-            </span>
-
-            <span class="value">
-                ${valor}
-            </span>
-
-        </div>
-
-    `;
-
+  document.getElementById('displayName').textContent = username;
+  document.getElementById('editName').value = username;
+  document.getElementById('welcome').style.display = 'none';
+  render();
 }
 
-
-/* =====================================================
-   HISTÓRICO
-===================================================== */
-
-function salvarHistorico(tipo,configuracao){
-
-    let historico =
-        JSON.parse(
-            localStorage.getItem(
-                "historicoSensi"
-            )
-        ) || [];
-
-
-    historico.unshift({
-
-        tipo:tipo,
-
-        configuracao:configuracao,
-
-        data:
-            new Date()
-            .toLocaleString("pt-BR")
-
-    });
-
-
-    historico =
-        historico.slice(0,30);
-
-
-    localStorage.setItem(
-        "historicoSensi",
-        JSON.stringify(historico)
-    );
-
+function showPhoto(file) {
+  if (!file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    document.getElementById('avatar').innerHTML = '<img src="' + reader.result + '" alt="Foto">';
+  };
+  reader.readAsDataURL(file);
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-function gerarMobile(nivel){
-
-    let configuracao;
-
-
-    if(nivel==="alta"){
-
-        configuracao={
-
-            "Geral":
-                random(180,200),
-
-            "Red Dot":
-                random(175,200),
-
-            "Mira 2x":
-                random(165,195),
-
-            "Mira 4x":
-                random(150,185),
-
-            "AWM":
-                random(130,160),
-
-            "Olhadinha":
-                random(175,200),
-
-            "DPI":
-                random(550,800)
-
-        };
-
-    }else{
-
-        configuracao={
-
-            "Geral":
-                random(90,130),
-
-            "Red Dot":
-                random(90,125),
-
-            "Mira 2x":
-                random(80,120),
-
-            "Mira 4x":
-                random(70,110),
-
-            "AWM":
-                random(60,100),
-
-            "Olhadinha":
-                random(90,125),
-
-            "DPI":
-                random(400,550)
-
-        };
-
-    }
-
-
-    let html="";
-
-
-    Object
-        .entries(configuracao)
-        .forEach(([nome,valor])=>{
-
-            html +=
-                criarItem(nome,valor);
-
-        });
-
-
-    const nomeNivel =
-        nivel==="alta"
-            ? "Alta"
-            : "Baixa";
-
-
-    document
-        .getElementById(
-            "mobile"+
-            nomeNivel+
-            "Valores"
-        )
-        .innerHTML=html;
-
-
-    document
-        .getElementById(
-            "resultadoMobile"+
-            nomeNivel
-        )
-        .classList.add("show");
-
-
-    salvarHistorico(
-        "📱 Mobile "+nomeNivel,
-        configuracao
-    );
-
+function changeName() {
+  const name = document.getElementById('editName').value.trim();
+  if (!name) {
+    document.getElementById('profileMsg').textContent = 'Digite um nome válido.';
+    return;
+  }
+  username = name;
+  document.getElementById('displayName').textContent = username;
+  document.getElementById('profileMsg').textContent = 'Nome atualizado!';
 }
 
-
-/* =====================================================
-   EMULADOR
-===================================================== */
-
-function gerarEmulador(nivel){
-
-    let configuracao;
-
-
-    if(nivel==="alta"){
-
-        configuracao={
-
-            "Sensibilidade X":
-                random(90,120),
-
-            "Sensibilidade Y":
-                random(85,115),
-
-            "DPI":
-                random(700,1000),
-
-            "Polling Rate":
-                1000,
-
-            "FPS":
-                [120,144,165,240]
-                [random(0,3)],
-
-            "Resolução":
-                [
-                    "1280 x 720",
-                    "1600 x 900",
-                    "1920 x 1080"
-                ][random(0,2)]
-
-        };
-
-    }else{
-
-        configuracao={
-
-            "Sensibilidade X":
-                random(60,85),
-
-            "Sensibilidade Y":
-                random(55,80),
-
-            "DPI":
-                random(500,700),
-
-            "Polling Rate":
-                [500,1000]
-                [random(0,1)],
-
-            "FPS":
-                [60,90,120]
-                [random(0,2)],
-
-            "Resolução":
-                [
-                    "1280 x 720",
-                    "1600 x 900",
-                    "1920 x 1080"
-                ][random(0,2)]
-
-        };
-
-    }
-
-
-    let html="";
-
-
-    Object
-        .entries(configuracao)
-        .forEach(([nome,valor])=>{
-
-            html +=
-                criarItem(nome,valor);
-
-        });
-
-
-    const nomeNivel =
-        nivel==="alta"
-            ? "Alta"
-            : "Baixa";
-
-
-    document
-        .getElementById(
-            "emulador"+
-            nomeNivel+
-            "Valores"
-        )
-        .innerHTML=html;
-
-
-    document
-        .getElementById(
-            "resultadoEmulador"+
-            nomeNivel
-        )
-        .classList.add("show");
-
-
-    salvarHistorico(
-        "🖥️ Emulador "+nomeNivel,
-        configuracao
-    );
-
+function changeProfilePhoto() {
+  const file = document.getElementById('changePhoto').files[0];
+  if (!file) {
+    document.getElementById('profileMsg').textContent = 'Escolha uma foto primeiro.';
+    return;
+  }
+  showPhoto(file);
+  document.getElementById('profileMsg').textContent = 'Foto atualizada!';
 }
 
+function setBalance() {
+  const v = Number(document.getElementById('newBalance').value);
+  if (!Number.isFinite(v) || v < 0) return;
 
-/* =====================================================
-   MOBILADOR
-===================================================== */
-
-function gerarMobilador(nivel){
-
-    let configuracao;
-
-
-    if(nivel==="alta"){
-
-        configuracao={
-
-            "Movimentar — Horizontal":
-                random(40,75),
-
-            "Movimentar — Vertical":
-                random(140,200),
-
-            "Atirar — Horizontal":
-                random(30,65),
-
-            "Atirar — Vertical":
-                random(120,180)
-
-        };
-
-    }else{
-
-        configuracao={
-
-            "Movimentar — Horizontal":
-                random(25,55),
-
-            "Movimentar — Vertical":
-                random(100,150),
-
-            "Atirar — Horizontal":
-                random(20,45),
-
-            "Atirar — Vertical":
-                random(90,135)
-
-        };
-
-    }
-
-
-    let html=`
-
-        <div class="mobiladorGroup">
-
-            <h3>
-                🏃 MOVIMENTAR
-            </h3>
-
-            ${criarItem(
-                "Horizontal",
-                configuracao[
-                    "Movimentar — Horizontal"
-                ]
-            )}
-
-            ${criarItem(
-                "Vertical",
-                configuracao[
-                    "Movimentar — Vertical"
-                ]
-            )}
-
-        </div>
-
-
-        <div class="mobiladorGroup">
-
-            <h3>
-                🔫 ATIRAR
-            </h3>
-
-            ${criarItem(
-                "Horizontal",
-                configuracao[
-                    "Atirar — Horizontal"
-                ]
-            )}
-
-            ${criarItem(
-                "Vertical",
-                configuracao[
-                    "Atirar — Vertical"
-                ]
-            )}
-
-        </div>
-
-    `;
-
-
-    const nomeNivel =
-        nivel==="alta"
-            ? "Alta"
-            : "Baixa";
-
-
-    document
-        .getElementById(
-            "mobilador"+
-            nomeNivel+
-            "Valores"
-        )
-        .innerHTML=html;
-
-
-    document
-        .getElementById(
-            "resultadoMobilador"+
-            nomeNivel
-        )
-        .classList.add("show");
-
-
-    salvarHistorico(
-        "🎮 Mobilador "+nomeNivel,
-        configuracao
-    );
-
+  balance = v;
+  transactions.unshift({
+    desc: 'Saldo fictício ajustado',
+    value: 0,
+    date: new Date().toLocaleString('pt-BR')
+  });
+  document.getElementById('newBalance').value = '';
+  render();
 }
 
+function transfer() {
+  const who = document.getElementById('recipient').value.trim().toUpperCase();
+  const v = Number(document.getElementById('amount').value);
 
-/* =====================================================
-   MOSTRAR HISTÓRICO
-===================================================== */
+  if (!/^DEMO-\d{4}$/.test(who) || who === 'DEMO-0001') {
+    return msg('Use outro código fictício, como DEMO-0002.');
+  }
+  if (!Number.isFinite(v) || v <= 0) return msg('Digite um valor válido.');
+  if (v > balance) return msg('Saldo fictício insuficiente.');
 
-function mostrarHistorico(){
-
-    const lista =
-        document.getElementById(
-            "listaHistorico"
-        );
-
-
-    const historico =
-        JSON.parse(
-            localStorage.getItem(
-                "historicoSensi"
-            )
-        ) || [];
-
-
-    if(historico.length===0){
-
-        lista.innerHTML=`
-
-            <div class="historyEmpty">
-
-                🎯
-
-                <br><br>
-
-                Nenhuma sensibilidade
-                foi gerada ainda.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    lista.innerHTML="";
-
-
-    historico.forEach(registro=>{
-
-        const card =
-            document.createElement("div");
-
-
-        card.className=
-            "card historyCard";
-
-
-        let html=`
-
-            <span class="badge">
-                ${registro.tipo}
-            </span>
-
-            <div class="historyDate">
-                ${registro.data}
-            </div>
-
-        `;
-
-
-        Object
-            .entries(
-                registro.configuracao
-            )
-            .forEach(([nome,valor])=>{
-
-                html +=
-                    criarItem(nome,valor);
-
-            });
-
-
-        card.innerHTML=html;
-
-
-        lista.appendChild(card);
-
-    });
-
+  balance -= v;
+  transactions.unshift({
+    desc: 'Envio fictício para ' + who,
+    value: -v,
+    date: new Date().toLocaleString('pt-BR')
+  });
+  document.getElementById('amount').value = '';
+  msg('Transferência simulada com sucesso!');
+  render();
 }
 
+function pagar() {
+  const cpf = document.getElementById('payCpf').value.trim();
+  const v = Number(document.getElementById('payAmount').value);
 
-/* =====================================================
-   LIMPAR HISTÓRICO
-===================================================== */
+  if (!cpf) {
+    payMsg('Adiciona o CPF para pagamento');
+    return;
+  }
+  if (!Number.isFinite(v) || v <= 0) {
+    payMsg('Digite um valor válido');
+    return;
+  }
+  if (v > balance) {
+    payMsg('Saldo fictício insuficiente');
+    return;
+  }
 
-function limparHistorico(){
+  balance -= v;
+  transactions.unshift({
+    desc: 'Pagamento fictício para CPF ' + cpf,
+    value: -v,
+    date: new Date().toLocaleString('pt-BR')
+  });
 
-    localStorage.removeItem(
-        "historicoSensi"
-    );
-
-    mostrarHistorico();
-
+  document.getElementById('payAmount').value = '';
+  payMsg('Pagamento simulado com sucesso!');
+  render();
 }
 
+function resetDemo() {
+  balance = 500;
+  transactions.length = 0;
+  document.getElementById('recipient').value = '';
+  document.getElementById('amount').value = '';
+  document.getElementById('newBalance').value = '';
+  document.getElementById('payCpf').value = '';
+  document.getElementById('payAmount').value = '';
+  msg('');
+  payMsg('');
+  render();
+  abrirAba('inicio', document.querySelector('.action'));
+}
+
+render();
 </script>
-
 </body>
-
-   </html>
+</html>
