@@ -31,7 +31,7 @@ main{max-width:760px;margin:0 auto;padding:20px 20px 50px}
 .actions::-webkit-scrollbar{display:none}
 .action{flex:0 0 95px;text-align:center;font-size:13px;font-weight:700;line-height:1.3;color:#ddd;cursor:pointer}
 .action.active .circle{background:#8500d5;color:#fff}
-.circle{width:78px;height:78px;border-radius:50%;background:var(--soft);margin:0 auto 10px;display:grid;place-items:center;font-size:22px;color:#ddd;transition:.2s;font-weight:700}
+.circle{width:78px;height:78px;border-radius:50%;background:var(--soft);margin:0 auto 10px;display:grid;place-items:center;font-size:18px;color:#ddd;transition:.2s;font-weight:700}
 
 .tab-content{display:none}
 .tab-content.active{display:block}
@@ -46,6 +46,8 @@ button.light{background:#3d2a55;color:#d4b8f0}
 .historyitem{display:flex;justify-content:space-between;border-bottom:1px solid #333;padding:12px 0;font-size:13px;gap:10px}
 .historyitem:last-child{border:0}
 .section-title{font-size:20px;margin:0 0 16px;color:#fff}
+.cpf-box{background:#2a2a2a;border-radius:12px;padding:18px;text-align:center;margin-top:10px}
+.cpf-box b{font-size:20px;color:#c77dff;letter-spacing:1px}
 
 #welcome{
  position:fixed;inset:0;background:linear-gradient(135deg,#9700dc,#7100c8);
@@ -188,12 +190,18 @@ button.light{background:#3d2a55;color:#d4b8f0}
   <div class="panel">
     <div class="section-title">Receber de brincadeira</div>
     <p style="color:#aaa;font-size:14px;margin:0 0 16px">
-      Esta é só uma demonstração. Em um app real, aqui apareceria um QR Code ou chave Pix para receber.
+      Esta é só uma demonstração.
     </p>
-    <div style="background:#2a2a2a;border-radius:12px;padding:20px;text-align:center;color:#c77dff;font-size:18px;font-weight:700">
-      DEMO-0001
+
+    <div class="small">Seu identificador fictício</div>
+    <div class="cpf-box">
+      <b id="meuId">DEMO-0001</b>
     </div>
-    <div class="small" style="text-align:center;margin-top:12px">Seu identificador fictício</div>
+
+    <div class="small" style="margin-top:20px">Seu CPF fake</div>
+    <div class="cpf-box">
+      <b id="meuCpf">000.000.000-00</b>
+    </div>
   </div>
  </div>
 
@@ -219,7 +227,14 @@ button.light{background:#3d2a55;color:#d4b8f0}
     <button onclick="setBalance()">Atualizar saldo fictício</button>
   </div>
 
-  <button class="light" style="margin-top:20px" onclick="resetDemo()">Reiniciar demonstração</button>
+  <div class="panel" style="margin-top:16px">
+    <div class="section-title">Conta salva</div>
+    <p style="color:#aaa;font-size:14px;margin:0 0 12px">
+      Sua conta é salva automaticamente neste celular.  
+      Você não perde o saldo nem o histórico ao fechar o app.
+    </p>
+    <button class="light" onclick="resetDemo()">Apagar conta e reiniciar</button>
+  </div>
  </div>
 
  <div class="note">
@@ -230,11 +245,49 @@ button.light{background:#3d2a55;color:#d4b8f0}
 
 <script>
 let balance = 500;
-const transactions = [];
+let transactions = [];
 let username = '';
+let meuCpf = '';
+let photoData = null;
 
-const money = n => n.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+const money = n => Number(n).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
 
+/* ---------- Gerar CPF fake ---------- */
+function gerarCpfFake() {
+  const n = () => Math.floor(Math.random() * 9);
+  return `\( {n()} \){n()}\( {n()}. \){n()}\( {n()} \){n()}.\( {n()} \){n()}\( {n()}- \){n()}${n()}`;
+}
+
+/* ---------- Salvar / Carregar conta ---------- */
+function salvarConta() {
+  const data = {
+    username,
+    balance,
+    transactions,
+    meuCpf,
+    photoData
+  };
+  localStorage.setItem('bancoRoxoConta', JSON.stringify(data));
+}
+
+function carregarConta() {
+  const raw = localStorage.getItem('bancoRoxoConta');
+  if (!raw) return false;
+
+  try {
+    const data = JSON.parse(raw);
+    username = data.username || '';
+    balance = data.balance || 500;
+    transactions = data.transactions || [];
+    meuCpf = data.meuCpf || gerarCpfFake();
+    photoData = data.photoData || null;
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+/* ---------- Navegação de abas ---------- */
 function abrirAba(nome, el) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + nome).classList.add('active');
@@ -245,6 +298,8 @@ function abrirAba(nome, el) {
 
 function render() {
   document.getElementById('balance').textContent = money(balance);
+  document.getElementById('meuCpf').textContent = meuCpf;
+
   const h = document.getElementById('history');
   h.innerHTML = transactions.length
     ? transactions.map(t => `
@@ -271,6 +326,8 @@ function confirmProfile() {
 
   username = name;
   balance = Number(value);
+  meuCpf = gerarCpfFake();
+
   document.getElementById('nameStep').style.display = 'none';
   document.getElementById('photoStep').style.display = 'block';
 }
@@ -282,6 +339,8 @@ function finishProfile() {
   document.getElementById('displayName').textContent = username;
   document.getElementById('editName').value = username;
   document.getElementById('welcome').style.display = 'none';
+
+  salvarConta();
   render();
 }
 
@@ -289,7 +348,9 @@ function showPhoto(file) {
   if (!file.type.startsWith('image/')) return;
   const reader = new FileReader();
   reader.onload = () => {
-    document.getElementById('avatar').innerHTML = '<img src="' + reader.result + '" alt="Foto">';
+    photoData = reader.result;
+    document.getElementById('avatar').innerHTML = '<img src="' + photoData + '" alt="Foto">';
+    salvarConta();
   };
   reader.readAsDataURL(file);
 }
@@ -303,6 +364,7 @@ function changeName() {
   username = name;
   document.getElementById('displayName').textContent = username;
   document.getElementById('profileMsg').textContent = 'Nome atualizado!';
+  salvarConta();
 }
 
 function changeProfilePhoto() {
@@ -326,6 +388,7 @@ function setBalance() {
     date: new Date().toLocaleString('pt-BR')
   });
   document.getElementById('newBalance').value = '';
+  salvarConta();
   render();
 }
 
@@ -347,6 +410,7 @@ function transfer() {
   });
   document.getElementById('amount').value = '';
   msg('Transferência simulada com sucesso!');
+  salvarConta();
   render();
 }
 
@@ -376,24 +440,32 @@ function pagar() {
 
   document.getElementById('payAmount').value = '';
   payMsg('Pagamento simulado com sucesso!');
+  salvarConta();
   render();
 }
 
 function resetDemo() {
-  balance = 500;
-  transactions.length = 0;
-  document.getElementById('recipient').value = '';
-  document.getElementById('amount').value = '';
-  document.getElementById('newBalance').value = '';
-  document.getElementById('payCpf').value = '';
-  document.getElementById('payAmount').value = '';
-  msg('');
-  payMsg('');
-  render();
-  abrirAba('inicio', document.querySelector('.action'));
+  if (!confirm('Tem certeza que deseja apagar a conta e reiniciar?')) return;
+
+  localStorage.removeItem('bancoRoxoConta');
+  location.reload();
 }
 
-render();
+/* ---------- Ao abrir o app ---------- */
+window.onload = () => {
+  if (carregarConta()) {
+    // Já tem conta salva → entra direto
+    document.getElementById('welcome').style.display = 'none';
+    document.getElementById('displayName').textContent = username;
+    document.getElementById('editName').value = username;
+
+    if (photoData) {
+      document.getElementById('avatar').innerHTML = '<img src="' + photoData + '" alt="Foto">';
+    }
+
+    render();
+  }
+};
 </script>
 </body>
 </html>
